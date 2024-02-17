@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'AuthenticationApp.apps.AuthenticationappConfig',
+    'CarApp.apps.CarappConfig',
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'AuthenticationApp.Client'
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-]

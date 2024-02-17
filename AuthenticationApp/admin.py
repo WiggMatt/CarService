@@ -7,7 +7,7 @@ from AuthenticationApp.models import Client
 @admin.register(Client)
 class CustomUserAdmin(UserAdmin):
     model = Client
-    list_display = ['username', 'bio', 'phone_number', 'is_staff']
+    list_display = ['bio', 'username', 'phone_number', 'is_staff']
     search_fields = ('username', 'bio', 'phone_number')
     ordering = ['username']
 
@@ -17,5 +17,3 @@ class CustomUserAdmin(UserAdmin):
         ('Права', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Важные даты', {'fields': ('last_login', 'date_joined')}),
     )
-
-# admin.site.register(Client, UserAdmin)

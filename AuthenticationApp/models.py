@@ -10,7 +10,7 @@ class Client(AbstractUser):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.email
+        return self.bio
 
     class Meta:
         verbose_name = 'Пользователь'
