@@ -7,7 +7,7 @@ class Client(AbstractUser):
     bio = models.CharField("ФИО", max_length=100)
     phone_number = models.CharField("Номер телефона", max_length=11, unique=True)
 
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ["bio", "phone_number"]
 
     def __str__(self):
         return self.bio
