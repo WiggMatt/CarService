@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'AuthenticationApp.apps.AuthenticationappConfig',
     'CarApp.apps.CarappConfig',
+    'OrdersApp.apps.OrdersappConfig',
+    'ServiceApp.apps.ServiceappConfig',
 ]
 
 MIDDLEWARE = [
