@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заявки клиента</title>
+</head>
+<body>
+    <h1>Ваши заявки</h1>
+    <a href="{% url 'create_appeal' %}">Создать заявку</a>
+        <a href="{% url 'welcome_page' %}">Назад в профиль</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Дата создания</th>
+                <th>Дата выбранная</th>
+                <th>Время выбранное</th>
+                <th>Комментарий</th>
+                <th>Автомобиль</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appeal in appeals %}
+            <tr>
+                <td>{{ appeal.created_at }}</td>
+                <td>{{ appeal.chosen_date }}</td>
+                <td>{{ appeal.chosen_time }}</td>
+                <td>{{ appeal.comment }}</td>
+                <td>{{ appeal.car_id }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

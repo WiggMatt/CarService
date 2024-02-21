@@ -15,6 +15,14 @@ class CustomUser(AbstractUser):
         return self.bio
 
 
+class Administrator(CustomUser):
+    license_num = models.CharField("Номер ВУ", max_length=12, unique=True)
+
+    class Meta:
+        verbose_name = 'Клиент'
+        verbose_name_plural = 'Клиенты'
+
+
 class Client(CustomUser):
     license_num = models.CharField("Номер ВУ", max_length=12, unique=True)
 

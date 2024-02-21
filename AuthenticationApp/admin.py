@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from AuthenticationApp.models import Client
+from AuthenticationApp.models import Client, Manager, Mechanic
 
 
 @admin.register(Client)
+@admin.register(Manager)
+@admin.register(Mechanic)
 class CustomUserAdmin(UserAdmin):
     model = Client
     list_display = ['bio', 'username', 'phone_number', 'is_staff']

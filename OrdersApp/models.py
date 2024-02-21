@@ -32,7 +32,7 @@ class Order(models.Model):
     end_date = models.DateField(verbose_name='Дата окончания выполнения', blank=True, null=True)
     start_time = models.TimeField(verbose_name='Время начала выполнения', blank=True, null=True)
     end_time = models.TimeField(verbose_name='Время окончания выполнения', blank=True, null=True)
-    manager = models.ForeignKey(Manager, on_delete=models.SET_NULL, verbose_name='Менеджер', blank=True, null=True)
+    appeal = models.ForeignKey('Appeal', on_delete=models.SET_NULL, verbose_name='Заявка', blank=True, null=True)
 
     def __str__(self):
         return f"Заказ для {self.car} - {self.creation_date}"
@@ -40,3 +40,21 @@ class Order(models.Model):
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
+
+
+class Appeal(models.Model):
+    created_at = models.DateTimeField("Дата создания заявки", auto_now_add=True)
+    chosen_date = models.DateField("Дата выбранная пользователем")
+    chosen_time = models.TimeField("Время выбранное пользователем")
+    comment = models.TextField("Комментарий клиента", blank=True)
+    car_id = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name="Идентификатор авто")
+    manager_id = models.ForeignKey(Manager, on_delete=models.CASCADE, verbose_name="Идентификатор менеджера",
+                                   blank=True, null=True)
+
+    def __str__(self):
+        return f"Заявка от {self.created_at} для авто {self.car_id}"
+
+    class Meta:
+        verbose_name = "Заявка"
+        verbose_name_plural = "Заявки"
+

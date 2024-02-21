@@ -17,8 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from AuthenticationApp.views import main_view
+
 urlpatterns = [
+    path('', main_view, name='main_page'),
     path('admin/', admin.site.urls),
-    path('accounts/', include('AuthenticationApp.urls')),
+    path('profile/', include('AuthenticationApp.urls')),
     path('profile/', include('CarApp.urls')),
+    path('profile/', include('OrdersApp.urls')),
 ]

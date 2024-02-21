@@ -25,7 +25,11 @@ def welcome_page_client(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('main_page')
+
+
+def main_view(request):
+    return render(request, 'home_page.html')
 
 
 def login_user(request):

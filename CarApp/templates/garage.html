@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гараж</title>
+</head>
+<body>
+    <h1>Ваш гараж</h1>
+    <a href="{% url 'add_car' %}">Добавить авто</a>
+            <a href="{% url 'welcome_page' %}">Назад в профиль</a>
+    <table>
+        <thead>
+            <tr>
+                <th>СТС</th>
+                <th>Марка</th>
+                <th>Модель</th>
+                <th>Тип кузова</th>
+                <th>Государственный номер</th>
+                <th>Цвет</th>
+                <th>VIN номер</th>
+                <th>Год выпуска</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for car in cars %}
+            <tr>
+                <td>{{ car.sts }}</td>
+                <td>{{ car.brand }}</td>
+                <td>{{ car.model }}</td>
+                <td>{{ car.body_type }}</td>
+                <td>{{ car.license_plate }}</td>
+                <td>{{ car.color }}</td>
+                <td>{{ car.vin_number }}</td>
+                <td>{{ car.year_of_manufacture }}</td>
+                <td>
+                    <a href="{% url 'update_car' car.id %}">Изменить</a>
+                    <form action="{% url 'delete_car' car.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

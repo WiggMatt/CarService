@@ -2,9 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Добро пожаловать</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приветствие</title>
 </head>
 <body>
- {% csrf_token %}
+    <h1>Добро пожаловать!</h1>
+    <p>Вы авторизовались как: {{ user.username }}</p>
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Выйти</button>
+    </form>
+    <a href="{% url 'garage' %}"><button>Гараж</button></a>
+    <a href="{% url 'appeals_view' %}"><button>Заявки</button></a>
 </body>
 </html>

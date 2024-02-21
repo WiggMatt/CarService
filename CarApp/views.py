@@ -12,7 +12,7 @@ def add_car_view(request):
             car = form.save(commit=False)
             car.client = request.user  # Привязываем автомобиль к текущему пользователю
             car.save()
-            return redirect('AuthenticationApp/welcome_page.html')  # Перенаправляем на страницу "Автомобиль добавлен"
+            return redirect('garage')
     else:
         form = AddCarForm(initial={'client': request.user})  # Устанавливаем значение клиента в форме
     return render(request, 'add_car.html', {'form': form})
@@ -23,7 +23,7 @@ def delete_car_view(request, car_id):
     car = get_object_or_404(Car, id=car_id)
     if request.method == 'POST':
         car.delete()
-        return redirect('AuthenticationApp/welcome_page.html')  # Предполагается, что у вас есть url с именем 'home'
+        return redirect('garage')
     return render(request, 'delete_car.html', {'car_id': car_id})
 
 
@@ -34,7 +34,13 @@ def update_car_view(request, car_id):
         form = UpdateCarForm(request.POST, instance=car)
         if form.is_valid():
             form.save()
-            return redirect('AuthenticationApp/welcome_page.html')  # Предполагается, что у вас есть url с именем 'home'
+            return redirect('garage')  # Предполагается, что у вас есть url с именем 'home'
     else:
         form = UpdateCarForm(instance=car)
     return render(request, 'update_car.html', {'form': form})
+
+
+@login_required
+def garage_view(request):
+    cars = Car.objects.filter(client=request.user)
+    return render(request, 'garage.html', {'cars': cars})
