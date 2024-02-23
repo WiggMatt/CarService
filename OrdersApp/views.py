@@ -1,8 +1,9 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from AuthenticationApp.models import Mechanic
+from AuthenticationApp.models import Mechanic, Manager
 from CarApp.models import Car
 from .forms import AppealForm
 from .models import Appeal, Order
@@ -41,31 +42,47 @@ def appeal_details(request, appeal_id):
     return render(request, 'appeal_details.html', {'appeal': appeal, 'mechanics': mechanics})
 
 
+@login_required
 def update_appeal(request, appeal_id=None):
     if request.method == 'POST':
         # Получите данные из POST-запроса
-        new_date = request.POST.get('newDate')
-        new_time = request.POST.get('newTime')
+        new_date = request.POST.get('chosenDate')
+        new_time = request.POST.get('chosenTime')
         mechanic_id = request.POST.get('mechanic')
+
+        # Получите объекты менеджера и механика
+        manager = get_object_or_404(Manager, pk=request.user.pk)
+        mechanic = Mechanic.objects.get(pk=mechanic_id)
 
         # Обновите данные в базе данных
         appeal = Appeal.objects.get(pk=appeal_id)
         appeal.chosen_date = new_date
         appeal.chosen_time = new_time
-        appeal.manager = request.manager  # Предполагается, что менеджер авторизован
+        appeal.manager = manager
         appeal.is_processed = True
         appeal.save()
 
         # Создайте заказ на обслуживание
-        mechanic = Mechanic.objects.get(pk=mechanic_id)
-        order = Order.objects.create(
+        order = Order(
             car=appeal.car,
-            start_date=new_date,
-            start_time=new_time,
             appeal=appeal,
-            # Добавьте остальные поля заказа по вашим требованиям
+            status='PENDING',  # Устанавливаем начальный статус заказа
+            # Другие поля заказа, если есть
         )
+        order.save()
 
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False, 'error': 'Метод запроса должен быть POST'})
+
+
+@login_required
+def all_orders_view(request):
+    orders = Order.objects.all()
+    return render(request, 'all_orders.html', {'orders': orders})
+
+
+@login_required
+def order_details(request, order_id):
+    order = get_object_or_404(Order, pk=order_id)
+    return render(request, 'order_detail.html', {'order': order})

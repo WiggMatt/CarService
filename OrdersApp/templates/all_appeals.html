@@ -20,16 +20,18 @@
     </thead>
     <tbody>
     {% for appeal in appeals %}
-        <tr>
-            <td>{{ appeal.created_at }}</td>
-            <td>{{ appeal.chosen_date }}</td>
-            <td>{{ appeal.chosen_time }}</td>
-            <td>{{ appeal.comment }}</td>
-            <td>{{ appeal.car }}</td>
-            <td>{{ appeal.car.client }}</td> <!-- Выводим информацию о клиенте-владельце -->
-            <td><a href="{% url 'appeal_details' appeal.id %}">Обработать</a></td>
-            <!-- Добавляем кнопку "Обработать" с ссылкой на соответствующий URL -->
-        </tr>
+         {% if not appeal.is_processed %} <!-- Проверяем, что заявка необработана -->
+            <tr>
+                <td>{{ appeal.created_at }}</td>
+                <td>{{ appeal.chosen_date }}</td>
+                <td>{{ appeal.chosen_time }}</td>
+                <td>{{ appeal.comment }}</td>
+                <td>{{ appeal.car }}</td>
+                <td>{{ appeal.car.client }}</td> <!-- Выводим информацию о клиенте-владельце -->
+                <td><a href="{% url 'appeal_details' appeal.id %}">Обработать</a></td>
+                <!-- Добавляем кнопку "Обработать" с ссылкой на соответствующий URL -->
+            </tr>
+        {% endif %}
     {% endfor %}
     </tbody>
 </table>

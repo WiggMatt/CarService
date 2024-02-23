@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Полная информация о заказе</title>
+</head>
+<body>
+    <h1>Полная информация о заказе</h1>
+    <p><strong>Автомобиль:</strong> {{ order.car }}</p>
+    <p><strong>Статус выполнения:</strong> {{ order.get_status_display }}</p>
+    <p><strong>Конечная стоимость:</strong> {{ order.final_cost }}</p>
+    <p><strong>Дата окончания выполнения:</strong> {{ order.end_date }}</p>
+    <p><strong>Время окончания выполнения:</strong> {{ order.end_time }}</p>
+    <!-- Добавьте другие необходимые поля -->
+
+    <a href="{% url 'all_orders' %}">Назад</a>
+</body>
+</html>

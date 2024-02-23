@@ -28,18 +28,19 @@
 
     <a href="{% url 'all_appeals' %}">Назад</a>
 
-    <button type="button" onclick="openConfirmationModal()">Подтвердить</button>
+     <button type="button" onclick="openConfirmationModal()">Подтвердить</button>
 
-    <!-- Модальное окно для обработки заявки -->
-    <div id="confirmationModal" class="modal">
+    <!-- Модальное окно для подтверждения заявки -->
+    <div id="confirmationModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close" onclick="closeConfirmationModal()">&times;</span>
-            <form id="confirmationForm" action="{% url 'update_appeal' %}" method="post">
+            <form id="confirmationForm" action="{% url 'update_appeal' appeal.id %}" method="post">
                 {% csrf_token %}
-                <label for="newDate">Новая дата:</label>
-                <input type="date" id="newDate" name="newDate" value="{{ appeal.chosen_date  }}">
-                <label for="newTime">Новое время:</label>
-                <input type="time" id="newTime" name="newTime" value="{{ appeal.chosen_time }}">
+                <label for="chosenDate">Дата выбранная:</label>
+                <input type="date" id="chosenDate" name="chosenDate" value="{{ appeal.chosen_date|date:'Y-m-d' }}">
+
+                <label for="chosenTime">Время выбранное:</label>
+                <input type="time" id="chosenTime" name="chosenTime" value="{{ appeal.chosen_time }}">
 
                 <label for="mechanic">Выберите механика:</label>
                 <select id="mechanic" name="mechanic">
@@ -47,7 +48,6 @@
                         <option value="{{ mechanic.id }}">{{ mechanic.bio }}</option>
                     {% endfor %}
                 </select>
-
 
                 <button type="button" onclick="confirmAppointment()">Сохранить</button>
                 <button type="button" onclick="closeConfirmationModal()">Отмена</button>
@@ -66,8 +66,8 @@
             document.getElementById("confirmationModal").style.display = "none";
         }
 
-        function confirmAppointment()
-        {
+        // Функция для отправки данных на сервер и обработки ответа
+        function confirmAppointment() {
             var form = document.getElementById("confirmationForm");
             var formData = new FormData(form);
 
@@ -83,9 +83,8 @@
                 .then(data => {
                     if (data.success) {
                         alert('Заявка успешно подтверждена');
-                        closeModal();
-                        // Если обновление прошло успешно, перезагрузите страницу или выполните другие действия
-                        location.reload(); // Пример перезагрузки страницы
+                        closeConfirmationModal();
+                        window.location.href = "{% url 'all_appeals' %}";
                     } else {
                         alert('Произошла ошибка при подтверждении заявки');
                         console.error('Ошибка при подтверждении заявки:', data.error);

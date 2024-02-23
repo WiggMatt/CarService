@@ -64,5 +64,27 @@ def login_manager(request):
     return render(request, 'login.html', {'form': form})
 
 
+@login_required
 def manager_account_view(request):
     return render(request, 'manager_account.html')
+
+
+def login_mechanic(request):
+    if request.method == 'POST':
+        form = LoginForm(request, request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                # Редирект на страницу, куда пользователь хотел попасть перед авторизацией
+                return redirect(request.GET.get('next', 'mechanic_account'))
+    else:
+        form = LoginForm()
+    return render(request, 'login.html', {'form': form})
+
+
+@login_required
+def mechanic_account_view(request):
+    return render(request, 'mechanic_account.html')
