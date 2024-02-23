@@ -26,7 +26,7 @@
                 <td>{{ appeal.chosen_date }}</td>
                 <td>{{ appeal.chosen_time }}</td>
                 <td>{{ appeal.comment }}</td>
-                <td>{{ appeal.car_id }}</td>
+                <td>{{ appeal.car.brand }} {{ appeal.car.model }}</td>
             </tr>
             {% endfor %}
         </tbody>

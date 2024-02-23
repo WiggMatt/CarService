@@ -25,7 +25,8 @@ class Order(models.Model):
         ('IN_PROGRESS', 'В процессе выполнения'),
         ('COMPLETED', 'Выполнен'),
     ]
-    status = models.CharField(max_length=20, choices=status_choices, default='PENDING', verbose_name='Статус выполнения')
+    status = models.CharField(max_length=20, choices=status_choices, default='PENDING',
+                              verbose_name='Статус выполнения')
     final_cost = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Конечная стоимость')
     creation_date = models.DateField(auto_now_add=True, verbose_name='Дата создания')
     start_date = models.DateField(verbose_name='Дата начала выполнения', blank=True, null=True)
@@ -49,7 +50,8 @@ class Appeal(models.Model):
     comment = models.TextField("Комментарий клиента", blank=True)
     car = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name="Идентификатор авто")
     manager = models.ForeignKey(Manager, on_delete=models.CASCADE, verbose_name="Идентификатор менеджера",
-                                   blank=True, null=True)
+                                blank=True, null=True)
+    is_processed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Заявка от {self.created_at} для авто {self.car_id}"
@@ -57,4 +59,3 @@ class Appeal(models.Model):
     class Meta:
         verbose_name = "Заявка"
         verbose_name_plural = "Заявки"
-
