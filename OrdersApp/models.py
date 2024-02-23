@@ -47,8 +47,8 @@ class Appeal(models.Model):
     chosen_date = models.DateField("Дата выбранная пользователем")
     chosen_time = models.TimeField("Время выбранное пользователем")
     comment = models.TextField("Комментарий клиента", blank=True)
-    car_id = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name="Идентификатор авто")
-    manager_id = models.ForeignKey(Manager, on_delete=models.CASCADE, verbose_name="Идентификатор менеджера",
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name="Идентификатор авто")
+    manager = models.ForeignKey(Manager, on_delete=models.CASCADE, verbose_name="Идентификатор менеджера",
                                    blank=True, null=True)
 
     def __str__(self):

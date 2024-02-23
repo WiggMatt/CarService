@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список заявок</title>
+</head>
+<body>
+<h1>Список заявок</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Дата создания</th>
+        <th>Дата выбранная</th>
+        <th>Время выбранное</th>
+        <th>Комментарий</th>
+        <th>Автомобиль</th>
+        <th>Владелец</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for appeal in appeals %}
+        <tr>
+            <td>{{ appeal.created_at }}</td>
+            <td>{{ appeal.chosen_date }}</td>
+            <td>{{ appeal.chosen_time }}</td>
+            <td>{{ appeal.comment }}</td>
+            <td>{{ appeal.car }}</td>
+            <td>{{ appeal.car.client }}</td> <!-- Выводим информацию о клиенте-владельце -->
+            <td><a href="{% url 'appeal_details' appeal.id %}">Обработать</a></td>
+            <!-- Добавляем кнопку "Обработать" с ссылкой на соответствующий URL -->
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

@@ -12,7 +12,7 @@ class AppealForm(forms.ModelForm):
 
     class Meta:
         model = Appeal
-        exclude = ['manager_id']
+        exclude = ['manager']
         widgets = {
             'chosen_date': forms.DateInput(attrs={'type': 'date'}),
         }
@@ -22,4 +22,4 @@ class AppealForm(forms.ModelForm):
         cars = kwargs.pop('cars', None)
         super().__init__(*args, **kwargs)
         if user and cars:
-            self.fields['car_id'].queryset = cars
+            self.fields['car'].queryset = cars

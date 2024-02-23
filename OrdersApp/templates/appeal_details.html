@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Полная информация о заявке</title>
+</head>
+<body>
+    <h1>Полная информация о заявке</h1>
+    <p><strong>Дата создания:</strong> {{ appeal.created_at }}</p>
+    <p><strong>Дата выбранная:</strong> {{ appeal.chosen_date }}</p>
+    <p><strong>Время выбранное:</strong> {{ appeal.chosen_time }}</p>
+    <p><strong>Комментарий:</strong> {{ appeal.comment }}</p>
+
+    <h2>Информация об автомобиле</h2>
+    <p><strong>Марка:</strong> {{ appeal.car.brand }}</p>
+    <p><strong>Модель:</strong> {{ appeal.car.model }}</p>
+    <p><strong>Госномер:</strong> {{ appeal.car.license_plate }}</p>
+    <p><strong>Год выпуска:</strong> {{ appeal.car.year_of_manufacture }}</p>
+    <p><strong>Цвет:</strong> {{ appeal.car.color }}</p>
+    <p><strong>VIN номер:</strong> {{ appeal.car.vin_number }}</p>
+    <!-- Добавьте другие необходимые поля -->
+
+    <h2>Информация о владельце</h2>
+    <p><strong>ФИО:</strong> {{ appeal.car.client.bio }}</p>
+    <p><strong>Электронная почта:</strong> {{ appeal.car.client.username }}</p>
+    <p><strong>Номер телефона:</strong> {{ appeal.car.client.phone_number }}</p>
+
+</body>
+</html>

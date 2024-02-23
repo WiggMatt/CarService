@@ -1,10 +1,10 @@
 from django.db import models
 
-from AuthenticationApp.models import Client
+from AuthenticationApp.models import Client, CustomUser
 
 
 class Car(models.Model):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    client = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     sts = models.CharField("СТС", max_length=100)
     brand = models.CharField("Марка", max_length=100)
     model = models.CharField("Модель", max_length=100)
