@@ -4,6 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Список заказов</title>
+    <style>
+        /* Стили для всплывающего окна */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
     <h1>Список заказов</h1>
@@ -14,16 +44,31 @@
         <thead>
             <tr>
                 <th>Автомобиль</th>
-                <th>Статус выполнения</th>
                 <th>Связанная заявка</th>
+                <th>Статус выполнения</th>
             </tr>
         </thead>
         <tbody>
             {% for order in orders %}
             <tr>
                 <td>{{ order.car }}</td>
+                <td>
+                    {% if order.appeal %}
+                        <div class="tooltip">
+                            <a href="#" class="tooltip-link">Заявка от {{ order.appeal.created_at|date:"Y-m-d" }}</a>
+                            <span class="tooltiptext">
+                                Дата создания: {{ order.appeal.created_at }}<br>
+                                Дата выбранная: {{ order.appeal.chosen_date }}<br>
+                                Время выбранное: {{ order.appeal.chosen_time }}<br>
+                                Комментарий: {{ order.appeal.comment }}
+                            </span>
+                        </div>
+                    {% else %}
+                        Нет связанной заявки
+                    {% endif %}
+                </td>
                 <td>{{ order.get_status_display }}</td>
-                <td>{{ order.appeal }}</td>
+
                 <td><a href="{% url 'order_details' order.id %}">Обработать</a></td>
             </tr>
             {% endfor %}

@@ -1,12 +1,15 @@
-from django.contrib.auth import get_user_model
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from AuthenticationApp.models import Mechanic, Manager
 from CarApp.models import Car
+from ServiceApp.models import Service, ServiceGroup
 from .forms import AppealForm
-from .models import Appeal, Order
+from .models import Appeal, Order, OrderSpecification
 
 
 @login_required
@@ -84,5 +87,43 @@ def all_orders_view(request):
 
 @login_required
 def order_details(request, order_id):
-    order = get_object_or_404(Order, pk=order_id)
-    return render(request, 'order_detail.html', {'order': order})
+    order = Order.objects.get(id=order_id)
+    service_groups = ServiceGroup.objects.all()
+
+    if request.method == 'POST':
+        service_id = request.POST.get('service')
+        service = Service.objects.get(id=service_id)
+        order_specification = OrderSpecification.objects.create(mechanic=request.user.mechanic, service=service,
+                                                                order=order)
+        order_specification.save()
+        return redirect('order_details', order_id=order_id)
+
+    context = {
+        'order': order,
+        'service_groups': service_groups,
+    }
+    return render(request, 'order_detail.html', context)
+
+
+@login_required
+def update_order_status(request, order_id):
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        order = Order.objects.get(id=order_id)
+
+        if action == 'start_work' and order.status == 'PENDING':
+            order.status = 'IN_PROGRESS'
+            order.save()
+
+        elif action == 'complete_work' and order.status == 'IN_PROGRESS':
+            total_cost = order.orderspecification_set.aggregate(total_cost=Sum('service__price'))['total_cost']
+            if total_cost is not None:
+                order.final_cost = total_cost
+            order.status = 'COMPLETED'
+            order.end_date = datetime.now().date()
+            order.end_time = datetime.now().time()
+            order.save()
+
+    return redirect('order_details', order_id=order_id)
+
+

@@ -14,7 +14,7 @@ class ServiceGroup(models.Model):
 
 class Service(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название')
-    price_range = models.CharField(max_length=100, verbose_name='Стоимость')
+    price = models.CharField(max_length=100, verbose_name='Стоимость')
     duration = models.CharField(max_length=100, verbose_name='Примерное время выполнения')
     service_group = models.ForeignKey('ServiceGroup', on_delete=models.CASCADE, verbose_name='Группа услуг')
 

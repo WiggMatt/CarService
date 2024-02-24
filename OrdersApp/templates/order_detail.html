@@ -4,16 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Полная информация о заказе</title>
+    <style>
+
+        .main-container {
+            display: flex;
+            flex-basis: 0;
+            flex-grow: 1;
+            padding: 3em;
+        }
+
+        .order-details-container, .order-services-list {
+            float: left;
+            width: 50%;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+
+        .order-details-container {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-right: 10px;
+
+        }
+
+        .order-services-list {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-left: 10px;
+        }
+
+        .order-services-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .order-services-list li {
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .order-details-container, .order-services-list {
+                width: 100%;
+                margin: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Полная информация о заказе</h1>
-    <p><strong>Автомобиль:</strong> {{ order.car }}</p>
-    <p><strong>Статус выполнения:</strong> {{ order.get_status_display }}</p>
-    <p><strong>Конечная стоимость:</strong> {{ order.final_cost }}</p>
-    <p><strong>Дата окончания выполнения:</strong> {{ order.end_date }}</p>
-    <p><strong>Время окончания выполнения:</strong> {{ order.end_time }}</p>
-    <!-- Добавьте другие необходимые поля -->
+<h1>Полная информация о заказе</h1>
+    <div class="main-container">
+        <div class="order-details-container">
+            <p><strong>Автомобиль:</strong> {{ order.car }}</p>
+            <p><strong>Статус выполнения:</strong> {{ order.get_status_display }}</p>
+            <p><strong>Конечная стоимость:</strong> {{ order.final_cost }}</p>
+            <p><strong>Дата окончания выполнения:</strong> {{ order.end_date }}</p>
+            <p><strong>Время окончания выполнения:</strong> {{ order.end_time }}</p>
 
-    <a href="{% url 'all_orders' %}">Назад</a>
+            <a href="{% url 'all_orders' %}">Назад</a>
+
+            {% if order.status != 'COMPLETED' %}
+                <form action="{% url 'update_order_status' order.id %}" method="post">
+                    {% csrf_token %}
+                    {% if order.status == 'PENDING' %}
+                        <button type="submit" name="action" value="start_work">Взять в работу</button>
+                    {% elif order.status == 'IN_PROGRESS' %}
+                        <button type="submit" name="action" value="complete_work">Завершить работу</button>
+                    {% endif %}
+                </form>
+            {% endif %}
+        </div>
+
+        <div class="order-services-list">
+            <h2>Оказанные услуги</h2>
+            <ul>
+                {% for specification in order.orderspecification_set.all %}
+                    <li>{{ specification.service }}</li>
+                {% endfor %}
+            </ul>
+
+            {% if order.status != 'COMPLETED' and order.status != 'PENDING'  %}
+                <h2>Добавить услугу</h2>
+                <form action="{% url 'order_details' order.id %}" method="post">
+                    {% csrf_token %}
+                    <label>
+                        <select name="service">
+                            {% for group in service_groups %}
+                                <optgroup label="{{ group.name }}">
+                                    {% for service in group.service_set.all %}
+                                        <option value="{{ service.id }}">{{ service.name }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <button type="submit">Добавить</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>
