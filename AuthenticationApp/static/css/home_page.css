@@ -1,45 +1,148 @@
 body, html {
     margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: "Montserrat Alternates", sans-serif;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.content {
+    padding: 0 300px 0 300px;
 }
 
 header {
-    background-color: #333;
-    color: #fff;
-    padding: 20px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #fff;
+    height: 100px;
+    line-height: 60px;
+    box-shadow: 0px 5px 5px -5px rgba(34, 60, 80, 0.6);
 }
 
-.logo h1 {
-    margin: 0;
+.header-content{
+    display: flex;
+    justify-content: space-between;
 }
 
-nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+.header-content h1{
+    margin-left:15%;
+}
+.header-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right:15%;
 }
 
-nav ul li {
-    display: inline;
-    margin-left: -400px;
+.header-buttons a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #faa404;
+
 }
 
-nav ul li a {
-    color: #fff;
-    text-decoration: none;
+.header-buttons button{
+    background-color: #faa404;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    width: 100px;
+    height: 40px;
+    margin-left: 30px
+
 }
 
-.user-profile a {
-    color: #fff;
-    text-decoration: none;
+.content {
+    margin-top: 200px;
+}
+
+.main-image {
+    background-color: #faa404;
+    border-radius: 20px;
+    height: 400px;
+    box-shadow: 0px 5px 10px 0px rgba(231, 172, 76, 0.2);
+}
+
+.sales-info {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.service-info {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.all-sales-button {
+    width: 150px;
+    margin-top: 10px;
+    background-color: white;
+    border-radius: 10px;
+    border: 2px black solid;
+    height: 50px;
+}
+
+.all-service-button {
+    width: 150px;
+    margin-top: 10px;
+    background-color: white;
+    border-radius: 10px;
+    border: 2px #faa404 solid;
+    height: 50px;
+    color: #faa404;
+}
+
+.sale-grid {
+    display: flex;
+    height: 500px;
+    justify-content: space-between;
+}
+
+.sale-panel {
+    background-color: #faa404;
+    height: 100%;
+    width: 340px;
+    border-radius: 20px;
+    box-shadow: 0px 5px 10px 0px rgba(231, 172, 76, 0.2);
+}
+
+.service-grid-1 {
+    display: flex;
+    height: 250px;
+    justify-content: space-between;
+}
+
+.service-grid-2 {
+    margin-top: 20px;
+    display: flex;
+    height: 250px;
+    justify-content: space-between;
+}
+
+.service-panel {
+    background-color: #faa404;
+    height: 100%;
+    width: 300px;
+    border-radius: 20px;
+    box-shadow: 0px 5px 10px 0px rgba(231, 172, 76, 0.2);
+}
+
+.service-info{
+    display: flex;
+    justify-content: space-between;
+}
+
+.service-info h1{
+    width: 400px;
+    font-weight: bolder;
+}
+
+.service-info-button p{
+    width: 600px;
+    text-align: left;
+    display: table;
 }

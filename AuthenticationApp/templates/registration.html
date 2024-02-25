@@ -5,13 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
 </head>
+<link rel="stylesheet" href="/static/css/registration.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
 <body>
-    <h2>Register</h2>
-    <form method="POST">
+<div class="reg-panel">
+    <form method="post">
+        <h2>Регистрация</h2>
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
+        <div class="input-group">
+            <label for="id_password2">ФИО</label>
+            {{ form.bio }}
+        </div>
+        <div class="input-group">
+            <label for="id_password2">Эл.почта</label>
+            {{ form.username }}
+        </div>
+        <div class="input-group">
+            <label for="id_password2">Номер телефона</label>
+            {{ form.phone_number }}
+        </div>
+        <div class="input-group">
+            <label for="id_password2">Пароль</label>
+            {{ form.password1 }}
+        </div>
+        <div class="input-group">
+            <label for="id_password2">Повтор пароля</label>
+            {{ form.password2 }}
+        </div>
+        <div class='center-button'>
+            <button type="submit">Register</button>
+        </div>
+        <div class="reg-prompt">
+            <p class="re-text"><a class="reg-link" href="{% url 'login' %}">Авторизация</a></p>
+        </div>
+
     </form>
+</div>
+
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let inputField = document.querySelector('input[name="phone_number"]');
