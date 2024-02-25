@@ -3,12 +3,29 @@ body {
     align-items: center;
     justify-content: center;
     background: url('/static/image/car-background.jpg');
-    font-family: Montserrat, 'sans-serif';
+    font-family: "Montserrat", 'sans-serif';
     background-size: cover;
 }
 
 .login-panel h2 {
     text-align: center;
+}
+
+.header-content {
+    position: fixed;
+    top: 50px; /* Расположение от верха */
+    right: 50px; /* Расположение от правого края */
+    z-index: 9999;
+}
+
+#service-link {
+    text-decoration: none; /* Убираем подчеркивание ссылки */
+    color: inherit; /* Наследуем цвет текста */
+}
+
+#service-link:hover {
+    text-decoration: none; /* Убираем подчеркивание ссылки при наведении */
+    color: inherit; /* Наследуем цвет текста при наведении */
 }
 
 .login-panel {

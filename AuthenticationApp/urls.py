@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import path
 from . import views
-from .views import welcome_page_client, manager_account_view, mechanic_account_view
+from .views import welcome_page_client
 
 urlpatterns = [
     path('registration/', views.registration, name='registration'),  # Маршрут для страницы регистрации
@@ -10,8 +10,6 @@ urlpatterns = [
     path('home/', login_required(welcome_page_client), name='welcome_page'),
 
     path('manager-login/', views.login_manager, name='manager_login'),
-    path('manager-account/', login_required(manager_account_view), name='manager_account'),
 
     path('mechanic-login/', views.login_mechanic, name='mechanic_login'),
-    path('mechanic-account/', login_required(mechanic_account_view), name='mechanic_account'),
 ]

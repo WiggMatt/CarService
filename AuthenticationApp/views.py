@@ -12,7 +12,7 @@ def registration(request):
             user = form.save()
             authenticate_user = authenticate(username=user.username, password=form.cleaned_data['password1'])
             login(request, authenticate_user)
-            return redirect('welcome_page')
+            return redirect('/')
     else:
         form = RegistrationForm()
     return render(request, 'registration.html', {'form': form})
@@ -20,7 +20,7 @@ def registration(request):
 
 @login_required
 def welcome_page_client(request):
-    return render(request, 'welcome_page.html', {"title": "Welcome Page"})
+    return render(request, 'client_page.html', {"title": "Welcome Page"})
 
 
 def logout_view(request):
@@ -42,7 +42,7 @@ def login_user(request):
             if user is not None:
                 login(request, user)
                 # Редирект на страницу, куда пользователь хотел попасть перед авторизацией
-                return redirect(request.GET.get('next', 'welcome_page'))
+                return redirect(request.GET.get('next', '/'))
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
@@ -58,15 +58,10 @@ def login_manager(request):
             if user is not None:
                 login(request, user)
                 # Редирект на страницу, куда пользователь хотел попасть перед авторизацией
-                return redirect(request.GET.get('next', 'manager_account'))
+                return redirect(request.GET.get('next', 'all_appeals'))
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
-
-
-@login_required
-def manager_account_view(request):
-    return render(request, 'manager_account.html')
 
 
 def login_mechanic(request):
@@ -79,12 +74,8 @@ def login_mechanic(request):
             if user is not None:
                 login(request, user)
                 # Редирект на страницу, куда пользователь хотел попасть перед авторизацией
-                return redirect(request.GET.get('next', 'mechanic_account'))
+                return redirect(request.GET.get('next', 'all_orders'))
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
-
-@login_required
-def mechanic_account_view(request):
-    return render(request, 'mechanic_account.html')

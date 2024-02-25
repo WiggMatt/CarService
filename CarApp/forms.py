@@ -15,5 +15,4 @@ class DeleteCarForm(forms.Form):
 class UpdateCarForm(forms.ModelForm):
     class Meta:
         model = Car
-        fields = ['sts', 'brand', 'model', 'body_type', 'license_plate', 'color', 'vin_number', 'year_of_manufacture',
-                  'client']
+        fields = ['sts', 'brand', 'model', 'body_type', 'license_plate', 'color', 'vin_number', 'year_of_manufacture']

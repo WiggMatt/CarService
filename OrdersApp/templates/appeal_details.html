@@ -1,12 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Полная информация о заявке</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: "Montserrat Alternates", sans-serif;
+            background: url('/static/image/car-back.jpg');
+            background-size: cover;
+
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #fff;
+            height: 100px;
+            line-height: 60px;
+            box-shadow: 0px 5px 5px -5px rgba(34, 60, 80, 0.6);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .header-content h1 {
+            margin-left: 15%;
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15%;
+        }
+
+        .header-buttons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #faa404;
+        }
+
+        .header-buttons button {
+            background-color: #faa404;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            width: 100px;
+            height: 40px;
+            margin-left: 30px
+        }
+
+        .content {
+            margin-top: 250px;
+            padding: 0 300px;
+            margin-left: 70px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 40px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #faa404;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #f39000;
+        }
+
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 40px; /* Увеличение внутренних отступов */
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px; /* Ограничение ширины для лучшего отображения */
+            border-radius: 10px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Затемнение фона */
+            z-index: 999; /* Поверх остальных элементов */
+        }
+
+
+        .modal-info {
+            margin-bottom: 20px; /* Добавлен отступ между элементами */
+        }
+
+        .modal-info label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .modal-info input,
+        .modal-info select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .modal-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            background-color: #faa404;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .modal-buttons button:hover {
+            background-color: #f39000;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        body, html {
+            margin: 0;
+            font-family: "Montserrat Alternates", sans-serif;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #fff;
+            height: 100px;
+            line-height: 60px;
+            box-shadow: 0px 5px 5px -5px rgba(34, 60, 80, 0.6);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .header-content h1 {
+            margin-left: 15%;
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15%;
+        }
+
+        .header-buttons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #faa404;
+
+        }
+
+        .header-buttons button {
+            background-color: #faa404;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            width: 100px;
+            height: 40px;
+            margin-left: 30px
+
+        }
+
+        .content {
+            margin-top: 200px;
+            padding: 0 100px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        a.button {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #faa404;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        a.button:hover {
+            background-color: #f39000;
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15%;
+        }
+
+        .header-buttons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #faa404;
+
+        }
+
+        .header-buttons button {
+            background-color: #faa404;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            width: 100px;
+            height: 40px;
+            margin-left: 30px
+
+        }
+
+        /* Стили для выпадающего меню */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            width: 120px;
+            z-index: 1;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 5px 0;
+            top: 100%; /* Сдвигаем список вниз относительно dropbtn */
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 8px 16px;
+            text-decoration: none;
+            display: block;
+            border-radius: 10px;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Дополнительные стили для кнопки */
+        .dropbtn {
+            background-color: transparent;
+            color: #faa404;
+            padding: 16px;
+            font-size: 12px;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px; /* Добавлено скругление краев */
+        }
+
+        .dropbtn:hover {
+            background-color: #f1f1f1;
+            color: #000;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Полная информация о заявке</h1>
+<header>
+    <div class="header-content">
+        <h1>Полная информация о заявке</h1>
+        <div class="dropdown header-buttons">
+            <button class="dropbtn">
+                {% if user.is_authenticated %}{{ user.username }}{% else %}Личный кабинет{% endif %}
+            </button>
+            <div class="dropdown-content">
+                <a href="{% url 'logout' %}">Выйти</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="content">
     <p><strong>Дата создания:</strong> {{ appeal.created_at }}</p>
     <p><strong>Дата выбранная:</strong> {{ appeal.chosen_date }}</p>
     <p><strong>Время выбранное:</strong> {{ appeal.chosen_time }}</p>
@@ -19,7 +380,6 @@
     <p><strong>Год выпуска:</strong> {{ appeal.car.year_of_manufacture }}</p>
     <p><strong>Цвет:</strong> {{ appeal.car.color }}</p>
     <p><strong>VIN номер:</strong> {{ appeal.car.vin_number }}</p>
-    <!-- Добавьте другие необходимые поля -->
 
     <h2>Информация о владельце</h2>
     <p><strong>ФИО:</strong> {{ appeal.car.client.bio }}</p>
@@ -28,45 +388,55 @@
 
     <a href="{% url 'all_appeals' %}">Назад</a>
 
-     <button type="button" onclick="openConfirmationModal()">Подтвердить</button>
+    <button type="button" onclick="openConfirmationModal()">Подтвердить</button>
 
     <!-- Модальное окно для подтверждения заявки -->
-    <div id="confirmationModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close" onclick="closeConfirmationModal()">&times;</span>
-            <form id="confirmationForm" action="{% url 'update_appeal' appeal.id %}" method="post">
-                {% csrf_token %}
-                <label for="chosenDate">Дата выбранная:</label>
-                <input type="date" id="chosenDate" name="chosenDate" value="{{ appeal.chosen_date|date:'Y-m-d' }}">
 
-                <label for="chosenTime">Время выбранное:</label>
-                <input type="time" id="chosenTime" name="chosenTime" value="{{ appeal.chosen_time }}">
+    <div id="confirmationModal" class="modal" style="display: none">
+        <div class="modal-overlay" onclick="">
+            <div class="modal-content">
+                <span class="close" onclick="closeConfirmationModal()">&times;</span>
+                <form id="confirmationForm" action="{% url 'update_appeal' appeal.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-info">
+                        <label for="chosenDate">Дата выбранная:</label>
+                        <input type="date" id="chosenDate" name="chosenDate"
+                               value="{{ appeal.chosen_date|date:'Y-m-d' }}">
+                    </div>
 
-                <label for="mechanic">Выберите механика:</label>
-                <select id="mechanic" name="mechanic">
-                    {% for mechanic in mechanics %}
-                        <option value="{{ mechanic.id }}">{{ mechanic.bio }}</option>
-                    {% endfor %}
-                </select>
+                    <div class="modal-info">
+                        <label for="chosenTime">Время выбранное:</label>
+                        <input type="time" id="chosenTime" name="chosenTime" value="{{ appeal.chosen_time }}">
+                    </div>
 
-                <button type="button" onclick="confirmAppointment()">Сохранить</button>
-                <button type="button" onclick="closeConfirmationModal()">Отмена</button>
-            </form>
+                    <div class="modal-info">
+                        <label for="mechanic">Выберите механика:</label>
+                        <select id="mechanic" name="mechanic">
+                            {% for mechanic in mechanics %}
+                                <option value="{{ mechanic.id }}">{{ mechanic.bio }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="modal-buttons">
+                        <button type="button" onclick="confirmAppointment()">Сохранить</button>
+                        <button type="button" onclick="closeConfirmationModal()">Отмена</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
+
     <script>
-        // Функция для открытия модального окна
         function openConfirmationModal() {
             document.getElementById("confirmationModal").style.display = "block";
         }
 
-        // Функция для закрытия модального окна
         function closeConfirmationModal() {
             document.getElementById("confirmationModal").style.display = "none";
         }
 
-        // Функция для отправки данных на сервер и обработки ответа
         function confirmAppointment() {
             var form = document.getElementById("confirmationForm");
             var formData = new FormData(form);
@@ -96,4 +466,5 @@
         }
     </script>
 </body>
+
 </html>

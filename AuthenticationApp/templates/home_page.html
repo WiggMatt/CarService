@@ -16,12 +16,23 @@
     <div class="header-content">
         <h1>SERVICE</h1>
         <div class="header-buttons">
-            <a href="{% url 'login' %}">Личный кабинет</a>
-
+            <div class="dropdown">
+                <button class="dropbtn">{% if user.is_authenticated %}{{ user.username }}{% else %}Личный кабинет{% endif %}</button>
+                <div class="dropdown-content">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'garage' %}">Гараж</a>
+                        <a href="{% url 'appeals_view' %}">Заявки</a>
+                        <a href="{% url 'logout' %}">Выйти</a>
+                    {% else %}
+                        <a href="{% url 'login' %}">Войти</a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-
     </div>
 </header>
+
+
 <div class="content">
     <div class="main-image">
 
@@ -32,7 +43,14 @@
     </div>
     <div class="sale-grid">
         <div class="sale-panel">
+            <div class="sale-panel-item" >
 
+                <h3 slot="title">Бесплатная диагностика ходовой части</h3>
+
+                <p slot="desc">для&nbsp;друга&nbsp;— бесплатно,<br> для&nbsp;вас&nbsp;— 150&nbsp;бонусов на&nbsp;счёт
+                </p>
+
+            </div>
         </div>
         <div class="sale-panel">
 
@@ -86,6 +104,3 @@
 </div>
 </body>
 </html>
-
-{#<a href="{% url 'login' %}"><button>Войти</button></a>#}
-{#<a href="{% url 'registration' %}"><button>Зарегистрироваться</button></a>#}
