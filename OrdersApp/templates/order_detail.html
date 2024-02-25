@@ -4,33 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Полная информация о заказе</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
     <style>
+        body, html {
+            margin: 0;
+            font-family: "Montserrat Alternates", sans-serif;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #fff;
+            height: 100px;
+            line-height: 60px;
+            box-shadow: 0px 5px 5px -5px rgba(34, 60, 80, 0.6);
+            z-index: 9999;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 15%;
+        }
+
+        .header-content h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15%;
+        }
+
+        .header-buttons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #faa404;
+
+        }
+
+        .header-buttons button {
+            background-color: #faa404;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            height: 40px;
+            margin-left: 30px;
+            font-family: "Montserrat", 'sans-serif';
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+
+        }
+
+        .header-buttons a:hover, .header-buttons button:hover {
+            background-color: #f1f1f1;
+            color: #000;
+        }
 
         .main-container {
+            margin-top: 200px;
             display: flex;
-            flex-basis: 0;
-            flex-grow: 1;
-            padding: 3em;
+            justify-content: space-around;
         }
 
         .order-details-container, .order-services-list {
-            float: left;
-            width: 50%;
-            box-sizing: border-box;
+            width: 45%;
             padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0px 5px 10px 0px rgba(231, 172, 76, 0.2);
         }
 
         .order-details-container {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            margin-right: 10px;
-
+            background-color: #fff;
+            border: 2px solid #ccc;
         }
 
         .order-services-list {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            margin-left: 10px;
+            background-color: #faa404;
+            border: 2px solid #faa404;
+            color: #fff;
+        }
+
+        .order-services-list h2 {
+            margin-top: 0;
         }
 
         .order-services-list ul {
@@ -42,65 +113,187 @@
             margin-bottom: 10px;
         }
 
+        .order-services-list form {
+            margin-top: 20px;
+        }
+
+        .order-services-list select, .order-services-list button {
+            width: calc(100% - 22px); /* Учитываем ширину кнопки */
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 10px;
+            background-color: #fff;
+        }
+
+        .order-services-list button {
+            cursor: pointer;
+            color: #faa404;
+            font-weight: bold;
+        }
+
+        .order-services-list button:hover {
+            background-color: #faa404;
+            color: #fff;
+        }
+
         @media (max-width: 768px) {
-            .order-details-container, .order-services-list {
-                width: 100%;
-                margin: 0;
+            .main-container {
+                flex-direction: column;
+                align-items: center;
             }
+
+            .order-details-container, .order-services-list {
+                width: 90%;
+            }
+        }
+
+       /* Стили для выпадающего меню */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            width: 120px;
+            z-index: 1;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 5px 0;
+            top: 100%; /* Сдвигаем список вниз относительно dropbtn */
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 8px 16px;
+            text-decoration: none;
+            display: block;
+            border-radius: 10px;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Дополнительные стили для кнопки */
+        .dropbtn {
+            background-color: transparent;
+            color: #faa404;
+            padding: 16px;
+            font-size: 12px;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px; /* Добавлено скругление краев */
+        }
+
+        .dropbtn:hover {
+            background-color: #f1f1f1;
+            color: #000;
+        }
+
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+        }
+
+
+        .order-action-button {
+            background-color: #faa404;
+            color: #fff;
+            border-radius: 10px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-left: 30px;
+        }
+
+        .order-action-button:hover {
+            background-color: #f1f1f1;
+            color: #000;
         }
     </style>
 </head>
 <body>
-<h1>Полная информация о заказе</h1>
-    <div class="main-container">
-        <div class="order-details-container">
-            <p><strong>Автомобиль:</strong> {{ order.car }}</p>
-            <p><strong>Статус выполнения:</strong> {{ order.get_status_display }}</p>
-            <p><strong>Конечная стоимость:</strong> {{ order.final_cost }}</p>
-            <p><strong>Дата окончания выполнения:</strong> {{ order.end_date }}</p>
-            <p><strong>Время окончания выполнения:</strong> {{ order.end_time }}</p>
-
-            <a href="{% url 'all_orders' %}">Назад</a>
-
-            {% if order.status != 'COMPLETED' %}
-                <form action="{% url 'update_order_status' order.id %}" method="post">
-                    {% csrf_token %}
-                    {% if order.status == 'PENDING' %}
-                        <button type="submit" name="action" value="start_work">Взять в работу</button>
-                    {% elif order.status == 'IN_PROGRESS' %}
-                        <button type="submit" name="action" value="complete_work">Завершить работу</button>
-                    {% endif %}
-                </form>
-            {% endif %}
-        </div>
-
-        <div class="order-services-list">
-            <h2>Оказанные услуги</h2>
-            <ul>
-                {% for specification in order.orderspecification_set.all %}
-                    <li>{{ specification.service }}</li>
-                {% endfor %}
-            </ul>
-
-            {% if order.status != 'COMPLETED' and order.status != 'PENDING'  %}
-                <h2>Добавить услугу</h2>
-                <form action="{% url 'order_details' order.id %}" method="post">
-                    {% csrf_token %}
-                    <label>
-                        <select name="service">
-                            {% for group in service_groups %}
-                                <optgroup label="{{ group.name }}">
-                                    {% for service in group.service_set.all %}
-                                        <option value="{{ service.id }}">{{ service.name }}</option>
-                                    {% endfor %}
-                                </optgroup>
-                            {% endfor %}
-                        </select>
-                    </label>
-                    <button type="submit">Добавить</button>
-                </form>
-            {% endif %}
+<header>
+    <div class="header-content">
+        <h1>Детальная информация</h1>
+        <div class="header-buttons">
+            <div class="dropdown">
+                <button class="dropbtn">
+                    {% if user.is_authenticated %}{{ user.username }}{% else %}Личный кабинет{% endif %}</button>
+                <div class="dropdown-content">
+                    <a href="/">На глвную</a>
+                    <a href="{% url 'garage' %}">Гараж</a>
+                    <a href="{% url 'appeals_view' %}">Заявки</a>
+                    <a href="{% url 'logout' %}">Выйти</a>
+                </div>
+            </div>
         </div>
     </div>
+</header>
+
+<div class="main-container">
+    <div class="order-details-container">
+        <p><strong>Автомобиль:</strong> {{ order.car }}</p>
+        <p><strong>Статус выполнения:</strong> {{ order.get_status_display }}</p>
+        <p><strong>Конечная стоимость:</strong> {{ order.final_cost }}</p>
+        <p><strong>Дата окончания выполнения:</strong> {{ order.end_date }}</p>
+        <p><strong>Время окончания выполнения:</strong> {{ order.end_time }}</p>
+
+        <a href="{% url 'all_orders' %}" class="header-buttons">Назад</a>
+
+        {% if order.status != 'COMPLETED' %}
+            <form action="{% url 'update_order_status' order.id %}" method="post">
+                {% csrf_token %}
+                {% if order.status == 'PENDING' %}
+                    <button type="submit" name="action" value="start_work" class="order-action-button">Взять в работу
+                    </button>
+                {% elif order.status == 'IN_PROGRESS' %}
+                    <button type="submit" name="action" value="complete_work" class="order-action-button">Завершить
+                        работу
+                    </button>
+                {% endif %}
+            </form>
+        {% endif %}
+    </div>
+
+    <div class="order-services-list">
+        <h2>Оказанные услуги</h2>
+        <ul>
+            {% for specification in order.orderspecification_set.all %}
+                <li>{{ specification.service }}</li>
+            {% endfor %}
+        </ul>
+
+        {% if order.status != 'COMPLETED' and order.status != 'PENDING' %}
+            <h2>Добавить услугу</h2>
+            <form action="{% url 'order_details' order.id %}" method="post">
+                {% csrf_token %}
+                <label>
+                    <select name="service">
+                        {% for group in service_groups %}
+                            <optgroup label="{{ group.name }}">
+                                {% for service in group.service_set.all %}
+                                    <option value="{{ service.id }}">{{ service.name }}</option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                </label>
+                <br> <!-- Добавим перенос строки для разделения элементов формы -->
+                <button type="submit">Добавить</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+
 </body>
 </html>
