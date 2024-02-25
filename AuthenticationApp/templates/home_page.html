@@ -1,14 +1,30 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Главная</title>
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="/static/css/home_page.css">
 </head>
 <body>
-    <h1>Добро пожаловать на сайт!</h1>
-    <p>Пожалуйста, выберите действие:</p>
-    <a href="{% url 'login' %}"><button>Войти</button></a>
-    <a href="{% url 'registration' %}"><button>Зарегистрироваться</button></a>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>FIT SERVICE</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Услуги</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <a href="#">Личный кабинет</a>
+            </div>
+        </div>
+    </header>
 </body>
 </html>
+
+{#<a href="{% url 'login' %}"><button>Войти</button></a>#}
+{#<a href="{% url 'registration' %}"><button>Зарегистрироваться</button></a>#}

@@ -55,7 +55,7 @@ def update_appeal(request, appeal_id=None):
 
         # Получите объекты менеджера и механика
         manager = get_object_or_404(Manager, pk=request.user.pk)
-        mechanic = Mechanic.objects.get(pk=mechanic_id)
+        responsible_mechanic = Mechanic.objects.get(pk=mechanic_id).bio
 
         # Обновите данные в базе данных
         appeal = Appeal.objects.get(pk=appeal_id)
@@ -70,7 +70,7 @@ def update_appeal(request, appeal_id=None):
             car=appeal.car,
             appeal=appeal,
             status='PENDING',  # Устанавливаем начальный статус заказа
-            # Другие поля заказа, если есть
+            name_of_the_responsible_mechanic=responsible_mechanic
         )
         order.save()
 
@@ -81,7 +81,8 @@ def update_appeal(request, appeal_id=None):
 
 @login_required
 def all_orders_view(request):
-    orders = Order.objects.all()
+    mechanic = get_object_or_404(Mechanic, pk=request.user.pk)
+    orders = Order.objects.filter(name_of_the_responsible_mechanic=mechanic.bio)
     return render(request, 'all_orders.html', {'orders': orders})
 
 

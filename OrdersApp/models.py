@@ -32,6 +32,7 @@ class Order(models.Model):
     end_date = models.DateField(verbose_name='Дата окончания выполнения', blank=True, null=True)
     end_time = models.TimeField(verbose_name='Время окончания выполнения', blank=True, null=True)
     appeal = models.ForeignKey('Appeal', on_delete=models.SET_NULL, verbose_name='Заявка', blank=True, null=True)
+    name_of_the_responsible_mechanic = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return f"Заказ для {self.car}"
