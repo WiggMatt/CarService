@@ -41,9 +41,6 @@ INSTALLED_APPS = [
     'CarApp.apps.CarappConfig',
     'OrdersApp.apps.OrdersappConfig',
     'ServiceApp.apps.ServiceappConfig',
-
-
-    'sass_processor',
 ]
 
 MIDDLEWARE = [

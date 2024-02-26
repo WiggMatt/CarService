@@ -209,6 +209,7 @@
             <th>Время выбранное</th>
             <th>Комментарий</th>
             <th>Автомобиль</th>
+            <th>Статус</th>
         </tr>
         </thead>
         <tbody>
@@ -218,7 +219,22 @@
                 <td>{{ appeal.chosen_date }}</td>
                 <td>{{ appeal.chosen_time }}</td>
                 <td>{{ appeal.comment }}</td>
-                <td>{{ appeal.car.brand }} {{ appeal.car.model }}</td>
+                <td>{{ appeal.car.brand }} {{ appeal.car.model }} {{ appeal.car.license_plate }}</td>
+                <td>
+                    {% if not appeal.order %}
+                        Создана
+                    {% elif appeal.is_processed %}
+                        {% if appeal.order.status == 'PENDING' %}
+                            В работе
+                        {% elif appeal.order.status == 'IN_PROGRESS' %}
+                            Готова
+                        {% elif appeal.order.status == 'COMPLETED' %}
+                            Выполнена
+                        {% endif %}
+                    {% else %}
+                        Обработана
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

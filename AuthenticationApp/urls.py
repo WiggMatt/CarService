@@ -9,7 +9,9 @@ urlpatterns = [
     path('logout/', views.logout_view,  name='logout'),
     path('home/', login_required(welcome_page_client), name='welcome_page'),
 
-    path('manager-login/', views.login_manager, name='manager_login'),
+    path('personal-login', views.custom_login, name='personal-login'),
 
-    path('mechanic-login/', views.login_mechanic, name='mechanic_login'),
+    # path('manager-login/', views.login_manager, name='manager_login'),
+
+    # path('mechanic-login/', views.login_mechanic, name='mechanic_login'),
 ]

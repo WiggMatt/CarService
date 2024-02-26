@@ -48,7 +48,7 @@ def login_user(request):
     return render(request, 'login.html', {'form': form})
 
 
-def login_manager(request):
+def custom_login(request):
     if request.method == 'POST':
         form = LoginForm(request, request.POST)
         if form.is_valid():
@@ -57,25 +57,11 @@ def login_manager(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                # Редирект на страницу, куда пользователь хотел попасть перед авторизацией
-                return redirect(request.GET.get('next', 'all_appeals'))
+                # Редирект на страницу в зависимости от типа пользователя
+                if user.is_manager:
+                    return redirect('all_appeals')
+                elif user.is_mechanic:
+                    return redirect('all_orders')
     else:
         form = LoginForm()
-    return render(request, 'login.html', {'form': form})
-
-
-def login_mechanic(request):
-    if request.method == 'POST':
-        form = LoginForm(request, request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                # Редирект на страницу, куда пользователь хотел попасть перед авторизацией
-                return redirect(request.GET.get('next', 'all_orders'))
-    else:
-        form = LoginForm()
-    return render(request, 'login.html', {'form': form})
-
+    return render(request, 'personal_login.html', {'form': form})

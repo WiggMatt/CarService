@@ -1,100 +1,82 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Главная страница</title>
     <link rel="stylesheet" href="/static/css/home_page.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+          rel="stylesheet">
+    <title>Главная страница</title>
 </head>
 <body>
 <header>
-    <div class="header-content">
-        <h1>SERVICE</h1>
-        <div class="header-buttons">
-            <div class="dropdown">
-                <button class="dropbtn">{% if user.is_authenticated %}{{ user.username }}{% else %}Личный кабинет{% endif %}</button>
-                <div class="dropdown-content">
-                    {% if user.is_authenticated %}
+    <div class="logo">
+        <a href="/"><img src="/static/image/Vector-logo.svg" alt=""></a> <!-- Лого, Ссылка  -->
+    </div>
+    <div class="navbar">
+        <a href="#serv">Услуги</a> <!-- Ссылка  -->
+        <div class="dropdown">
+            <a class="dropbtn">Личный кабинет</a>
+            <div class="dropdown-content">
+                {% if user.is_authenticated %}
                         <a href="{% url 'garage' %}">Гараж</a>
                         <a href="{% url 'appeals_view' %}">Заявки</a>
                         <a href="{% url 'logout' %}">Выйти</a>
                     {% else %}
                         <a href="{% url 'login' %}">Войти</a>
                     {% endif %}
-                </div>
             </div>
         </div>
     </div>
 </header>
-
-
 <div class="content">
-    <div class="main-image">
-
+    <div class="hero">
+        <img class="hero-image" src="/static/image/main_bg.jpg" alt=""> <!-- Мэйн картинка -->
     </div>
-    <div class="sales-info">
-        <h1>Акции</h1>
-        <button class="all-sales-button">Все акции</button>
+    <div class="promotions">
+        <h2>Акции</h2>
+        <div class="promotions-parent">
+            <div class="promotions-div1"><a href="#"><h3>Бонусная программа для юридических лиц</h3></a></div>
+            <!-- Ссылка  -->
+            <div class="promotions-div2"><a href="#"><h3>Проверьте авто за 0 рублей</h3></a></div> <!-- Ссылка  -->
+            <div class="promotions-div3"><a href="#"><h3>Бесплатная диагностика ходовой части</h3></a></div>
+            <!-- Ссылка  -->
+            <div class="promotions-div4"><a href="#"><h3>Комплексное техобслуживание (ТО) автомобиля</h3></a></div>
+            <!-- Ссылка  -->
+            <div class="promotions-div5"><a href="#"><h3>Бесплатная замена масла ДВС и фильтра</h3></a></div>
+            <!-- Ссылка  -->
+            <div class="promotions-div6"></div>
+            <div class="promotions-div7"></div>
+        </div>
     </div>
-    <div class="sale-grid">
-        <div class="sale-panel">
-            <div class="sale-panel-item" >
-
-
-            </div>
+    <div id="serv" class="services">
+        <h2>Услуги</h2>
+        <div class="services-parent">
+            <div class="services-div1"><a href="#"><h3>Автосервис</h3></a></div> <!-- Ссылка  -->
+            <div class="services-div2"><a href="#"><h3>Диагностика</h3></a></div> <!-- Ссылка  -->
+            <div class="services-div3"><a href="#"><h3>Шиномонтаж</h3></a></div> <!-- Ссылка  -->
+            <div class="services-div4"><a href="#"><h3>Восстановление АКПП</h3></a></div> <!-- Ссылка  -->
+            <div class="services-div5"><a href="#"><h3>ОСАГО онлайн</h3></a></div> <!-- Ссылка  -->
+            <div class="services-div6"><a href="#"><h3>Услуги для автопарков</h3></a></div> <!-- Ссылка  -->
         </div>
-        <div class="sale-panel">
-
-        </div>
-        <div class="sale-panel">
-
-        </div>
-
     </div>
-    <div class="service-info">
-        <h1>Услуги</h1>
-        <button class="all-service-button">Все услуги</button>
-    </div>
-    <div class="service-grid-1">
-        <div class="service-panel">
-
+    <div class="about">
+        <div class="about-left">
+            <h1>Автосервис № 1 в России</h1> <!-- Текст  -->
         </div>
-        <div class="service-panel">
-
-        </div>
-        <div class="service-panel">
-
-        </div>
-        <div class="service-panel">
-
-        </div>
-
-    </div>
-    <div class="service-grid-2">
-        <div class="service-panel">
-
-        </div>
-        <div class="service-panel">
-
-        </div>
-        <div class="service-panel">
-
-        </div>
-        <div class="service-panel">
-
-        </div>
-
-    </div>
-    <div class="service-info">
-        <h1>SERVICE — автосервис № 1 в России</h1>
-        <div class="service-info-button">
-            <p>SERVICE — это не просто самая быстро растущая сеть автосервисов по всей России от Москвы до Владивостока. Это тысячи клиентов, которые нам доверяют. Это дружная команда людей, вдохновленных общей идеей и общим делом. Это строгие стандарты качества во всем и постоянная поддержка наших клиентов, где бы они ни находились.</p>
-            <button class="all-sales-button">Подробнее о компании</button>
+        <div class="about-right">
+            <p>
+                — это не просто самая быстро растущая сеть
+                автосервисов по всей России от Москвы до Владивостока.
+                Это тысячи клиентов, которые нам доверяют.
+                Это дружная команда людей, вдохновленных общей идеей и общим делом.
+                Это строгие стандарты качества во всем и
+                постоянная поддержка наших клиентов, где бы они ни находились.
+            </p> <!-- Текст  -->
+            <a href="{% url 'personal-login' %}">Для персонала</a> <!-- Ссылка, Текст  -->
         </div>
     </div>
 </div>
