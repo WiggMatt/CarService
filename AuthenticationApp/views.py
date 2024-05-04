@@ -15,12 +15,12 @@ def registration(request):
             return redirect('/')
     else:
         form = RegistrationForm()
-    return render(request, 'registration.html', {'form': form})
+    return render(request, 'AuthenticationAppTemplates/registration.html', {'form': form})
 
 
 @login_required
 def welcome_page_client(request):
-    return render(request, 'client_page.html', {"title": "Welcome Page"})
+    return render(request, 'AuthenticationAppTemplates/client_page.html', {"title": "Welcome Page"})
 
 
 def logout_view(request):
@@ -29,7 +29,7 @@ def logout_view(request):
 
 
 def main_view(request):
-    return render(request, 'home_page.html')
+    return render(request, 'AuthenticationAppTemplates/home_page.html')
 
 
 def login_user(request):
@@ -45,7 +45,7 @@ def login_user(request):
                 return redirect(request.GET.get('next', '/'))
     else:
         form = LoginForm()
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'AuthenticationAppTemplates/login.html', {'form': form})
 
 
 def custom_login(request):
@@ -64,4 +64,4 @@ def custom_login(request):
                     return redirect('all_orders')
     else:
         form = LoginForm()
-    return render(request, 'personal_login.html', {'form': form})
+    return render(request, 'AuthenticationAppTemplates/personal_login.html', {'form': form})

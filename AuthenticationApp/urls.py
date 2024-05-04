@@ -10,8 +10,4 @@ urlpatterns = [
     path('home/', login_required(welcome_page_client), name='welcome_page'),
 
     path('personal-login', views.custom_login, name='personal-login'),
-
-    # path('manager-login/', views.login_manager, name='manager_login'),
-
-    # path('mechanic-login/', views.login_mechanic, name='mechanic_login'),
 ]

@@ -41,9 +41,7 @@ header {
     transition: .3s;
 }
 
-.navbar a:hover {
-    font-size: 18px;
-}
+
 
 .content {
     margin: 0 auto;
@@ -421,21 +419,42 @@ header {
     border-radius: 8px;
     overflow: hidden;
     max-width: 160px;
-    padding-top: 6px;
+    padding: 20px;
+    margin-left: 20px;
 }
 
 .dropdown-content a {
-    margin-left: 32px;
     text-decoration: none;
     color: black;
     transition: .3s;
     font-size: 14px;
-    padding-top: 10px;
 }
 
-.dropdown-content a:hover {
-    font-size: 18px;
+.dropdown-content a:hover{
+    color: #f39000;
 }
+.dropdown-content ul{
+    list-style: none;
+}
+
+.dropdown-content ul li{
+    margin-bottom: 20px;
+}
+
+.dropdown-content ul li:last-child{
+    margin-bottom: 0px;
+}
+
+.dropdown-content ul li:first-child{
+    margin-top: 10px;
+}
+
+
+.dropdown-content a:last-child{
+    margin-bottom: 0;
+}
+
+
 
 .dropdown:hover .dropdown-content {
     display: block;
