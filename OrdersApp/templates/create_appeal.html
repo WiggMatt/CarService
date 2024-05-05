@@ -4,67 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Заявка</title>
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
     <style>
-        body{
-            margin-top: 120px;
+
+        *{
             font-family: "Montserrat Alternates", sans-serif;
+        }
+        body {
+            margin-top: 120px;
+
             background: url('/static/image/create-appeal.jpg');
             background-size: cover;
         }
 
         h2 {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 0;
+            margin-bottom: 40px;
+
         }
 
         form {
+
             max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 2px solid #faa404;
+            margin: 50px auto;
+            padding: 30px;
+
             border-radius: 10px;
             background-color: white;
+            box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.1); /* Тень формы */
         }
 
         form input[type="text"],
+        form input[type="date"],
+        form input[type="time"],
+        form textarea,
         form select {
-            width: 100%;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            font-size: 16px;
+            width: 100%; /* Учитываем padding и border */
+            height: 50px;
             padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
+            margin-top: 10px;
+            background-color: #f2f2f2;
+            border-radius: 10px; /* Скругление краев полей */
+            border: none;
+            box-sizing: border-box; /* Учитываем рамки и отступы внутри элемента */
+        }
+        form label{
+            font-weight: bold;
+        }
+        form textarea {
+            height: 200px;
+            resize: none;
         }
 
         form button {
+            font-size: 16px;
+            font-weight: bold;
+            height: 50px;
             display: block;
             width: 100%;
-            padding: 10px;
-            background-color: #faa404;
-            color: #fff;
+            padding: 12px;
+            margin-top: 40px;
+            background-color: #faa404; /* Цвет кнопки */
+            color: white; /* Цвет текста кнопки */
             border: none;
-            border-radius: 5px;
+            border-radius: 10px; /* Скругление краев кнопки */
             cursor: pointer;
             transition: background-color 0.3s ease;
+        /
         }
 
         form button:hover {
             background-color: #f39000;
         }
 
-                button[type="button"] {
+        button[type="button"] {
             display: block;
             width: 100%;
             padding: 12px;
-            margin-top: 20px;
+            margin-top: 10px;
             background-color: #616162; /* Цвет кнопки */
             color: white; /* Цвет текста кнопки */
             border: none;
-            border-radius: 5px; /* Скругление краев кнопки */
+            border-radius: 10px; /* Скругление краев кнопки */
             cursor: pointer;
             transition: background-color 0.3s ease; /* Плавное изменение цвета при наведении */
         }
@@ -77,16 +106,22 @@
             outline: none; /* Убираем обводку при фокусе */
         }
 
+        form p {
+            display: flex;
+            flex-direction: column;
+        }
+
     </style>
 </head>
 <body>
+
+<form method="POST">
     <h2>Запишитесь на СТО в Казани</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Записаться на СТО</button>
-        <button type="button" onclick="window.history.back()">Назад</button>
-    </form>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Записаться на СТО</button>
+    <button type="button" onclick="window.history.back()">Назад</button>
+</form>
 </body>
 </html>
 
