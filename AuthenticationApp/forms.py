@@ -20,15 +20,16 @@ class LoginForm(AuthenticationForm):
     username = forms.CharField(
         label="Email",
         max_length=100,
-        widget=forms.EmailInput,
+        widget=forms.EmailInput(attrs={'placeholder': 'Эл. почта'}),
     )
     password = forms.CharField(
         label="Пароль",
         strip=False,
-        widget=forms.PasswordInput,
+        widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}),
     )
 
     error_messages = {
         'invalid_login': "Пожалуйста, введите правильные почту и пароль. "
                          "Обратите внимание, что оба поля могут быть чувствительны к регистру.",
     }
+

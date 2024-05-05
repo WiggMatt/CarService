@@ -11,21 +11,26 @@
     <title>Add Car</title>
     <style>
         /* Общие стили */
-        body, html {
-            margin: 0;
+
+        *{
             font-family: "Montserrat Alternates", sans-serif;
+        }
+        body {
+            margin: 0;
+
             background: url('/static/image/car-background.jpg');
+            background-size: 100%;
         }
 
         h2 {
             text-align: center;
-            margin-top: 50px;
+
             color: #faa404; /* Цвет заголовка */
         }
 
         form {
-            width: 60%;
-            margin: 0 auto;
+            width: 30%;
+            margin: 50px auto;
             padding: 30px;
             background-color: #fff; /* Цвет формы */
             border-radius: 10px; /* Скругление краев формы */
@@ -35,23 +40,30 @@
         input[type="text"],
         input[type="number"],
         select {
-            width: calc(100% - 22px); /* Учитываем padding и border */
+            text-align: center;
+            font-size: 16px;
+            width: 100%; /* Учитываем padding и border */
+            height: 50px;
             padding: 10px;
             margin-top: 10px;
-            border: 1px solid #ccc; /* Цвет рамки полей */
-            border-radius: 5px; /* Скругление краев полей */
+            background-color: #f2f2f2;
+            border-radius: 10px; /* Скругление краев полей */
+            border: none;
             box-sizing: border-box; /* Учитываем рамки и отступы внутри элемента */
         }
 
         button[type="submit"] {
+            font-size: 16px;
+            font-weight: bold;
+            height: 50px;
             display: block;
             width: 100%;
             padding: 12px;
-            margin-top: 20px;
+            margin-top: 40px;
             background-color: #faa404; /* Цвет кнопки */
             color: white; /* Цвет текста кнопки */
             border: none;
-            border-radius: 5px; /* Скругление краев кнопки */
+            border-radius: 10px; /* Скругление краев кнопки */
             cursor: pointer;
             transition: background-color 0.3s ease; /* Плавное изменение цвета при наведении */
         }
@@ -65,10 +77,11 @@
         }
 
         button[type="button"] {
+            font-weight: bold;
             display: block;
             width: 100%;
             padding: 12px;
-            margin-top: 20px;
+            margin-top: 10px;
             background-color: #616162; /* Цвет кнопки */
             color: white; /* Цвет текста кнопки */
             border: none;
@@ -89,32 +102,33 @@
     </style>
 </head>
 <body>
-    <h2>Добавить авто в гараж</h2>
+
     <form method="post">
+        <h2>Добавить авто в гараж</h2>
         {% csrf_token %}
-        <label for="sts">СТС:</label>
-        <input type="text" id="sts" name="sts" required>
 
-        <label for="brand">Марка:</label>
-        <input type="text" id="brand" name="brand" required>
+        <input type="text" id="sts" name="sts" required placeholder="СТС">
 
-        <label for="model">Модель:</label>
-        <input type="text" id="model" name="model" required>
 
-        <label for="body_type">Тип кузова:</label>
-        <input type="text" id="body_type" name="body_type" required>
+        <input type="text" id="brand" name="brand" required placeholder="Марка">
 
-        <label for="license_plate">Государственный номер:</label>
-        <input type="text" id="license_plate" name="license_plate" required>
 
-        <label for="color">Цвет:</label>
-        <input type="text" id="color" name="color" required>
+        <input type="text" id="model" name="model" required placeholder="Модель">
 
-        <label for="vin_number">VIN номер:</label>
-        <input type="text" id="vin_number" name="vin_number" required>
 
-        <label for="year_of_manufacture">Год выпуска:</label>
-        <input type="number" id="year_of_manufacture" name="year_of_manufacture" required>
+        <input type="text" id="body_type" name="body_type" required placeholder="Тип кузова">
+
+
+        <input type="text" id="license_plate" name="license_plate" required placeholder="Государственный номер">
+
+
+        <input type="text" id="color" name="color" required placeholder="Цвет">
+
+
+        <input type="text" id="vin_number" name="vin_number" required placeholder="VIN номер">
+
+
+        <input type="number" id="year_of_manufacture" name="year_of_manufacture" required placeholder="Год выпуска">
 
         <button type="submit">Добавить</button>
          <button type="button" onclick="window.history.back()">Назад</button>

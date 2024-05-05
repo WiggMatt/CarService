@@ -14,6 +14,9 @@
         }
 
         header {
+            display: flex;
+            align-items: center;
+
             position: fixed;
             top: 0;
             width: 100%;
@@ -25,6 +28,8 @@
         }
 
         .header-content {
+            width: 100%;
+            align-items: center;
             display: flex;
             justify-content: space-between;
             padding: 0 15%;
@@ -32,21 +37,17 @@
 
         .header-content h1 {
             margin: 0;
-            font-size: 24px;
-            font-weight: 500;
+            font-size: 32px;
+            font-weight: 700;
+
         }
 
         .header-buttons {
+            margin-left: auto;
             display: flex;
             align-items: center;
         }
 
-        .header-buttons {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15%;
-        }
 
         .header-buttons a {
             display: flex;
@@ -117,25 +118,34 @@
             margin-top: 20px;
         }
 
-        .order-services-list select, .order-services-list button {
-            width: calc(100% - 22px); /* Учитываем ширину кнопки */
+        .order-services-list select {
+            width: 100%; /* Учитываем ширину кнопки */
+            height: 50px;
             padding: 10px;
             border-radius: 10px;
             border: none;
             margin-bottom: 10px;
             background-color: #fff;
+            transition: all ease 0.2s;
+            font-size: 16px;
+            font-family: "Montserrat Alternates", sans-serif;
+            -webkit-appearance: none;
+            -moz-appearance: none;
         }
 
+
         .order-services-list button {
+            font-size: 20px;
+            padding: 10px 20px;
             cursor: pointer;
             color: #faa404;
             font-weight: bold;
+            background-color: white;
+            border: none;
+            border-radius: 10px;
+
         }
 
-        .order-services-list button:hover {
-            background-color: #faa404;
-            color: #fff;
-        }
 
         @media (max-width: 768px) {
             .main-container {
@@ -148,7 +158,7 @@
             }
         }
 
-       /* Стили для выпадающего меню */
+        /* Стили для выпадающего меню */
         .dropdown {
             position: relative;
             display: inline-block;
@@ -206,22 +216,65 @@
 
 
         .order-action-button {
+            font-weight: bold;
+            font-size: 20px;
             background-color: #faa404;
             color: #fff;
             border-radius: 10px;
             padding: 10px 20px;
             border: none;
             cursor: pointer;
-            margin-left: 30px;
         }
 
         .order-action-button:hover {
             background-color: #f1f1f1;
             color: #000;
         }
+
+        ::-webkit-scrollbar {
+            width: 0;
+        }
+
+        .okaz-service {
+            width: 100%;
+            max-height: 234px;
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-y: scroll;
+            color: #000;
+            text-align: left;
+            margin-left: 50px;
+        }
+
+        .okaz-service h2 {
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+
+
     </style>
 </head>
 <body>
+{% if order.status != 'COMPLETED' %}
+    <style>
+        .choose-service {
+            width: 40%;
+        }
+
+    </style>
+{% else %}
+    <style>
+        .choose-service {
+            width: 0;
+            overflow: hidden; /* Для скрытия содержимого, если ширина 0 */
+        }
+        .okaz-service {
+            margin-left: 0;
+        }
+    </style>
+{% endif %}
 <header>
     <div class="header-content">
         <h1>Детальная информация</h1>
@@ -242,56 +295,90 @@
 
 <div class="main-container">
     <div class="order-details-container">
-        <p><strong>Автомобиль:</strong> {{ order.car }}</p>
-        <p><strong>Статус выполнения:</strong> {{ order.get_status_display }}</p>
-        <p><strong>Конечная стоимость:</strong> {{ order.final_cost }}</p>
-        <p><strong>Дата окончания выполнения:</strong> {{ order.end_date }}</p>
-        <p><strong>Время окончания выполнения:</strong> {{ order.end_time }}</p>
+        <p>Автомобиль: <strong>{{ order.car }}</strong></p>
+        <p>Статус выполнения: <strong>{{ order.get_status_display }}</strong></p>
+        {% if order.final_cost == none %}
+            <p>Конечная стоимость: <strong>Заказ еще не завершен!</strong></p>
+        {% else %}
+            <p>Конечная стоимость: <strong>{{ order.final_cost }}</strong></p>
+        {% endif %}
 
-        <a href="{% url 'all_orders' %}" class="header-buttons">Назад</a>
+        {% if order.end_date == none %}
+            <p>Дата окончания выполнения: <strong>Заказ еще не завершен!</strong></p>
+        {% else %}
+            <p>Дата окончания выполнения: <strong>{{ order.end_date }}</strong></p>
+        {% endif %}
+
+        {% if order.end_time == none %}
+            <p>Время окончания выполнения: <strong>Заказ еще не завершен!</strong></p>
+        {% else %}
+            <p>Время окончания выполнения: <strong>{{ order.end_time }}</strong></p>
+        {% endif %}
+
 
         {% if order.status != 'COMPLETED' %}
             <form action="{% url 'update_order_status' order.id %}" method="post">
                 {% csrf_token %}
                 {% if order.status == 'PENDING' %}
-                    <button type="submit" name="action" value="start_work" class="order-action-button">Взять в работу
-                    </button>
+                    <div class="submit-back" style="display: flex; justify-content: space-between">
+
+                        <a href="{% url 'all_orders' %}" class="back-button"
+                           style="display: flex; align-items: flex-end; text-decoration: none; color: #faa404">Назад</a>
+                        <button type="submit" name="action" value="start_work" class="order-action-button">Взять в
+                            работу
+                        </button>
+                    </div>
+
                 {% elif order.status == 'IN_PROGRESS' %}
-                    <button type="submit" name="action" value="complete_work" class="order-action-button">Завершить
-                        работу
-                    </button>
+                    <div class="submit-back" style="display: flex; justify-content: space-between">
+                        <a href="{% url 'all_orders' %}" class="back-button"
+                           style="display: flex; align-items: flex-end; text-decoration: none; color: #faa404">Назад</a>
+                        <button type="submit" name="action" value="complete_work" class="order-action-button">Завершить
+                            работу
+                        </button>
+                    </div>
                 {% endif %}
             </form>
+        {% else %}
+            <a href="{% url 'all_orders' %}" class="back-button"
+               style="display: flex; align-items: flex-end; text-decoration: none; color: #faa404">Назад</a>
         {% endif %}
     </div>
 
-    <div class="order-services-list">
-        <h2>Оказанные услуги</h2>
-        <ul>
-            {% for specification in order.orderspecification_set.all %}
-                <li>{{ specification.service }}</li>
-            {% endfor %}
-        </ul>
+    <div class="order-services-list" style="display: flex; justify-content: space-between">
 
-        {% if order.status != 'COMPLETED' and order.status != 'PENDING' %}
-            <h2>Добавить услугу</h2>
-            <form action="{% url 'order_details' order.id %}" method="post">
-                {% csrf_token %}
-                <label>
-                    <select name="service">
-                        {% for group in service_groups %}
-                            <optgroup label="{{ group.name }}">
-                                {% for service in group.service_set.all %}
-                                    <option value="{{ service.id }}">{{ service.name }}</option>
-                                {% endfor %}
-                            </optgroup>
-                        {% endfor %}
-                    </select>
-                </label>
-                <br> <!-- Добавим перенос строки для разделения элементов формы -->
-                <button type="submit">Добавить</button>
-            </form>
-        {% endif %}
+
+        <div class="choose-service">
+            {% if order.status != 'COMPLETED' and order.status != 'PENDING' %}
+
+                <h2 style="font-size: 20px; font-weight: normal">Добавить услугу</h2>
+                <form action="{% url 'order_details' order.id %}" method="post">
+                    {% csrf_token %}
+                    <label>
+                        <select name="service">
+                            {% for group in service_groups %}
+                                <optgroup label="{{ group.name }}">
+                                    {% for service in group.service_set.all %}
+                                        <option value="{{ service.id }}">{{ service.name }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <br> <!-- Добавим перенос строки для разделения элементов формы -->
+                    <button class="add-service-button" type="submit">Добавить</button>
+                </form>
+            {% endif %}
+        </div>
+        <div class="okaz-service">
+            <h2>Оказанные услуги:</h2>
+            <ul style="list-style: circle; margin-left: 20px;">
+                {% for specification in order.orderspecification_set.all %}
+                    <li>{{ specification.service }} - {{ specification.service.price }}Р</li>
+                {% endfor %}
+            </ul>
+        </div>
+
     </div>
 </div>
 
