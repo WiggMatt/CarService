@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Заявка</title>
+    <script>
+        window.onload = function () {
+            var today = new Date().toISOString().split('T')[0];
+            document.getElementById("id_chosen_date").setAttribute("min", today);
+        };
+    </script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,9 +17,10 @@
           rel="stylesheet">
     <style>
 
-        *{
+        * {
             font-family: "Montserrat Alternates", sans-serif;
         }
+
         body {
             margin-top: 120px;
 
@@ -56,9 +63,11 @@
             border: none;
             box-sizing: border-box; /* Учитываем рамки и отступы внутри элемента */
         }
-        form label{
+
+        form label {
             font-weight: bold;
         }
+
         form textarea {
             height: 200px;
             resize: none;

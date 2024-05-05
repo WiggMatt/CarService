@@ -26,31 +26,18 @@ def create_appeal(request):
     return render(request, 'create_appeal.html', {'form': form})
 
 
-# @login_required
-# def appeals_view(request):
-#     client_appeals = Appeal.objects.filter(car_id__client=request.user)
-#     return render(request, 'appeals_view.html', {'appeals': client_appeals})
-
-# @login_required
-# def appeals_view(request):
-#     # Получите все заявки клиента
-#     client_appeals = Appeal.objects.filter(car__client=request.user)
-#
-#     # Создайте словарь, в котором ключами будут заявки, а значениями - соответствующие заказы
-#     appeal_orders = {}
-#     for appeal in client_appeals:
-#         orders = Order.objects.filter(appeal=appeal)
-#         appeal_orders[appeal] = orders
-#
-#     return render(request, 'appeals_view.html', {'appeal_orders': appeal_orders})
-
-
 @login_required
 def appeals_view(request):
+    # Получите все заявки клиента
     client_appeals = Appeal.objects.filter(car__client=request.user)
-    orders = Order.objects.filter(appeal__in=client_appeals)
-    return render(request, 'appeals_view.html', {'appeals': client_appeals, 'orders': orders})
 
+    # Создайте словарь, в котором ключами будут заявки, а значениями - соответствующие заказы
+    appeal_orders = {}
+    for appeal in client_appeals:
+        orders = Order.objects.filter(appeal=appeal)
+        appeal_orders[appeal] = orders
+
+    return render(request, 'appeals_view.html', {'appeal_orders': appeal_orders})
 
 
 @login_required

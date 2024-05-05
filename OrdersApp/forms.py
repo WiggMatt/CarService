@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from django import forms
+from django.utils import timezone
 from .models import Appeal
 
 
@@ -27,3 +26,9 @@ class AppealForm(forms.ModelForm):
         self.fields['chosen_date'].label = 'Выберите дату'
         self.fields['comment'].label = 'Комментарий'
         self.fields['car'].label = 'Выберите автомобиль'
+
+    def clean_chosen_date(self):
+        chosen_date = self.cleaned_data['chosen_date']
+        if chosen_date < timezone.now().date():
+            raise forms.ValidationError("Вы не можете выбирать дату в прошлом")
+        return chosen_date
