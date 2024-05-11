@@ -1,0 +1,58 @@
+{% extends 'base_templates/base_layout.html' %}
+
+{% load static %}
+
+{% block title %} Ваши заявки {% endblock %}
+
+{% block styles %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/all_appeals.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+    {% include 'base_templates/base_staff_header.html' with header_title="Текущие заявки" %}
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <form method="GET" action="{% url 'appeal_list' %}">
+            {{ form.as_p }}
+            <input type="date" id="search_date" name="search_date">
+            <button type="submit">Фильтровать</button>
+        </form>
+        <table>
+            <thead>
+            <tr>
+                <th>Дата создания</th>
+                <th>Выбранная дата</th>
+                <th>Выбранное время</th>
+                <th>Комментарий</th>
+                <th>Автомобиль</th>
+                <th>Владелец</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for appeal in appeals %}
+                {% if not appeal.is_processed %}
+                    <tr>
+                        <td>{{ appeal.created_at }}</td>
+                        <td>{{ appeal.chosen_date }}</td>
+                        <td>{{ appeal.chosen_time }}</td>
+                        <td>{{ appeal.comment }}</td>
+                        <td>{{ appeal.car }}</td>
+                        <td>{{ appeal.car.client }}</td>
+                        <td><a class="action-button" href="{% url 'appeal_details' appeal.id %}">Обработать</a></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+

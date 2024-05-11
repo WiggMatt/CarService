@@ -1,0 +1,80 @@
+{% extends 'base_templates/base_layout.html' %}
+
+{% load static %}
+
+{% block title %} Гараж {% endblock %}
+
+{% block styles %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/garage.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+    {% include 'base_templates/base_account_header.html' with header_title="Ваш гараж" %}
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <a href="{% url 'add_car' %}" class="button">Добавить авто</a>
+        <form method="GET" action="{% url 'car_list' %}">
+            {{ form.as_p }}
+            <button type="submit">Искать</button>
+        </form>
+        <table>
+            <thead>
+            <tr>
+                <th>СТС</th>
+                <th>Марка</th>
+                <th>Модель</th>
+                <th>Тип кузова</th>
+                <th>Государственный номер</th>
+                <th>Цвет</th>
+                <th>VIN номер</th>
+                <th>Год выпуска</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for car in cars %}
+                <tr>
+                    <td>{{ car.sts }}</td>
+                    <td>{{ car.brand }}</td>
+                    <td>{{ car.model }}</td>
+                    <td>{{ car.body_type }}</td>
+                    <td>{{ car.license_plate }}</td>
+                    <td>{{ car.color }}</td>
+                    <td>{{ car.vin_number }}</td>
+                    <td>{{ car.year_of_manufacture }}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <a class="body-button" href="{% url 'update_car' car.id %}"><i
+                                    class='bx bx-edit-alt'></i></a>
+                            <form id="delete-form-{{ car.id }}" action="{% url 'delete_car' car.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="button" onclick="confirmDelete('{{ car.id }}')"><i
+                                        class='bx bx-trash'></i>
+                                </button>
+                            </form>
+                        </div>
+
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function confirmDelete(carId) {
+            if (confirm("Вы уверены, что хотите удалить этот автомобиль?")) {
+                document.getElementById('delete-form-' + carId).submit();
+            }
+        }
+    </script>
+
+{% endblock %}

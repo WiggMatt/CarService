@@ -1,0 +1,156 @@
+body {
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+    background: url(../image/car-back.jpg);
+    background-size: cover;
+
+}
+
+.content {
+    margin-top: 250px;
+    padding: 0 300px;
+    margin-left: 70px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    margin-top: 40px;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #faa404;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #f39000;
+}
+
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 40px; /* Увеличение внутренних отступов */
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px; /* Ограничение ширины для лучшего отображения */
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Затемнение фона */
+    z-index: 999; /* Поверх остальных элементов */
+}
+
+
+.modal-info {
+    margin-bottom: 20px; /* Добавлен отступ между элементами */
+}
+
+.modal-info label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.modal-info input,
+.modal-info select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.modal-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.modal-buttons button {
+    background-color: #faa404;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.modal-buttons button:hover {
+    background-color: #f39000;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    overflow: hidden;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+.action-button {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #faa404;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+    background-color: #f39000;
+}

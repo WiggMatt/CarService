@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mechanic Schedule List</title>
+</head>
+<body>
+    <h1>Mechanic Schedule List</h1>
+    <ul>
+        {% for schedule in schedules %}
+            <li><a href="{% url 'mechanic_schedule_detail' schedule.id %}">{{ schedule }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

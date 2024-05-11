@@ -37,10 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'AuthenticationApp.apps.AuthenticationappConfig',
-    'CarApp.apps.CarappConfig',
-    'OrdersApp.apps.OrdersappConfig',
-    'ServiceApp.apps.ServiceappConfig',
+    'src.users_app.apps.users_app_Config',
+    'src.car_app.apps.car_app_Config',
+    'src.orders_app.apps.orders_app_Config',
+    'src.services_app.apps.services_app_Config',
+    'src.schedule_app.apps.schedule_app_Config',
 ]
 
 MIDDLEWARE = [
@@ -120,12 +121,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'src/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'AuthenticationApp.CustomUser'
+AUTH_USER_MODEL = 'users_app.CustomUser'
 

@@ -1,0 +1,439 @@
+{% load static %}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0 auto;
+    max-width: 75vw;
+}
+
+.content {
+    margin: 50px auto 0;
+    max-width: 1440px;
+}
+
+.hero {
+    text-align: center;
+}
+
+.hero-image {
+    border-radius: 16px;
+}
+
+
+/* ///////////////////////////////////// Акции ///////////////////////////////////// */
+.promotions {
+    margin-top: 50px;
+}
+
+.promotions h2 {
+    font-size: 32px;
+}
+
+.promotions-parent {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 24px;
+    grid-row-gap: 24px;
+}
+
+.promotions-div1 {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.promotions-div2 {
+    grid-area: 2 / 1 / 3 / 2;
+}
+
+.promotions-div3 {
+    grid-area: 1 / 2 / 3 / 3;
+}
+
+.promotions-div4 {
+    grid-area: 1 / 3 / 2 / 4;
+}
+
+.promotions-div5 {
+    grid-area: 2 / 3 / 3 / 4;
+}
+
+.promotions-div6 {
+    grid-area: 1 / 1 / 3 / 2;
+}
+
+.promotions-div7 {
+    grid-area: 1 / 3 / 3 / 4;
+}
+
+.promotions-div1, .promotions-div2, .promotions-div3, .promotions-div4, .promotions-div5, .promotions-div6, .promotions-div7 {
+    margin: 0 auto;
+    min-width: 416px;
+    max-width: 416px;
+    min-height: 224px;
+    border-radius: 16px;
+    background-size: cover;
+}
+
+.promotions-div1 {
+    background-image: url(../image/stock1.jpeg);
+    transition: .3s;
+}
+
+.promotions-div1:hover {
+    scale: 1.01;
+}
+
+.promotions-div1 h3, .promotions-div1 a {
+    margin-left: 24px;
+    color: white;
+    font-size: 24px;
+    min-height: 224px;
+    text-decoration: none;
+}
+
+.promotions-div2 {
+    background-image: url(../image/mechanic-writing-blue-folder.jpg);
+    transition: .3s;
+}
+
+.promotions-div2:hover {
+    scale: 1.01;
+}
+
+.promotions-div2 h3, .promotions-div2 a {
+    margin-left: 24px;
+    color: white;
+    font-size: 24px;
+    min-height: 224px;
+    text-decoration: none;
+}
+
+.promotions-div3 {
+    min-height: 480px;
+    background-image: url(../image/repairmen-examining-wheel-structure.jpg);
+    transition: .3s;
+}
+
+.promotions-div3:hover {
+    scale: 1.01;
+}
+
+.promotions-div3 h3, .promotions-div3 a {
+    margin-left: 24px;
+    color: white;
+    font-size: 24px;
+    min-height: 480px;
+    text-decoration: none;
+}
+
+.promotions-div4 {
+    background-image: url(../image/blurred-background-man-s-hand-glove-holds-wrench-front-broken-automobile.jpg);
+    transition: .3s;
+}
+
+.promotions-div4:hover {
+    scale: 1.01;
+}
+
+.promotions-div4 h3, .promotions-div4 a {
+    margin-left: 24px;
+    color: white;
+    font-size: 24px;
+    min-height: 224px;
+    text-decoration: none;
+}
+
+.promotions-div5 {
+    background-image: url(../image/luxurious-car-parked-highway-with-illuminated-headlight-sunset.jpg);
+    transition: .3s;
+}
+
+.promotions-div5:hover {
+    scale: 1.01;
+}
+
+.promotions-div5 h3, .promotions-div5 a {
+    margin-left: 24px;
+    color: white;
+    font-size: 24px;
+    min-height: 224px;
+    text-decoration: none;
+}
+
+.promotions-div6, .promotions-div7 {
+    z-index: -1;
+}
+
+
+/* ///////////////////////////////////// Сервисы ///////////////////////////////////// */
+.services {
+    margin-top: 50px;
+}
+
+.services h2 {
+    font-size: 32px;
+}
+
+.services-parent {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 32px;
+    grid-row-gap: 32px;
+}
+
+.services-div1 {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.services-div2 {
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+.services-div3 {
+    grid-area: 1 / 3 / 2 / 4;
+}
+
+.services-div4 {
+    grid-area: 1 / 4 / 2 / 5;
+}
+
+.services-div5 {
+    grid-area: 2 / 1 / 3 / 2;
+}
+
+.services-div6 {
+    grid-area: 2 / 2 / 3 / 3;
+}
+
+.services-div1, .services-div2, .services-div3, .services-div4, .services-div5, .services-div6 {
+    margin: 0 auto;
+    min-width: 304px;
+    max-width: 304px;
+    min-height: 232px;
+    border-radius: 16px;
+    background-size: cover;
+}
+
+.services-div1 {
+    background-image: url(../image/side-view-worker-repairing-car.jpg);
+    transition: .3s;
+}
+
+.services-div1:hover {
+    scale: 1.01;
+}
+
+.services-div1 h3, .services-div1 a {
+    margin-left: 24px;
+    color: white;
+    font-size: 24px;
+    min-height: 232px;
+    text-decoration: none;
+}
+
+.services-div2 {
+    background-image: url(../image/scale_1200.jpg);
+    transition: .3s;
+}
+
+.services-div2:hover {
+    scale: 1.01;
+}
+
+.services-div2 h3, .services-div2 a {
+    margin-left: 24px;
+    color: white;
+    font-size: 24px;
+    min-height: 232px;
+    text-decoration: none;
+}
+
+.services-div3 {
+    background-image: url(../image/dirt-wheel-mechanic-holding-tire-repair-garage-replacement-winter-summer-tires.jpg);
+    transition: .3s;
+}
+
+.services-div3:hover {
+    scale: 1.01;
+}
+
+.services-div3 h3, .services-div3 a {
+    margin-left: 24px;
+    color: white;
+    font-size: 24px;
+    min-height: 232px;
+    text-decoration: none;
+}
+
+.services-div4 {
+    background-image: url(../image/female-mechanic-holding-spare-parts.jpg);
+    transition: .3s;
+}
+
+.services-div4:hover {
+    scale: 1.01;
+}
+
+.services-div4 h3, .services-div4 a {
+    margin-left: 24px;
+    color: white;
+    font-size: 24px;
+    min-height: 232px;
+    text-decoration: none;
+}
+
+.services-div5 {
+    background-image: url(../image/row-new-cars-port.jpg);
+    transition: .3s;
+}
+
+.services-div5:hover {
+    scale: 1.01;
+}
+
+.services-div5 h3, .services-div5 a {
+    margin-left: 24px;
+    color: white;
+    font-size: 24px;
+    min-height: 232px;
+    text-decoration: none;
+}
+
+.services-div6 {
+    background-image: url(../image/row-new-cars-port.jpg);
+    transition: .3s;
+}
+
+.services-div6:hover {
+    scale: 1.01;
+}
+
+.services-div6 h3, .services-div6 a {
+    margin-left: 24px;
+    color: white;
+    font-size: 24px;
+    min-height: 232px;
+    text-decoration: none;
+}
+
+
+/* ///////////////////////////////////// О компании ///////////////////////////////////// */
+.about {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+    margin-top: 70px;
+}
+
+.about-left {
+    width: 50vw;
+    max-width: 50vw;
+}
+
+.about-left h1 {
+    font-size: 48px;
+}
+
+.about-right {
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+    max-width: 50vw;
+}
+
+.about-right p {
+    color: rgb(88, 96, 102);
+}
+
+.about-right a {
+    text-align: center;
+    max-width: 128px;
+    margin-top: 48px;
+    padding: 8px 20px;
+    border: 3px solid black;
+    border-radius: 16px;
+    text-decoration: none;
+    color: black;
+    transition: .3s;
+}
+
+.about-right a:hover {
+    color: white;
+    background-color: black;
+}
+
+.about-right button {
+    text-align: center;
+    max-width: 128px;
+    margin-top: 48px;
+    padding: 8px 20px;
+    border: 3px solid black;
+    border-radius: 16px;
+    text-decoration: none;
+    color: black;
+    transition: .3s;
+    background-color: #ffffff;
+}
+
+.about-right button:hover {
+    color: white;
+    background-color: black;
+}
+
+/* ///////////////////////////////////// Для уведомления ///////////////////////////////////// */
+.modal {
+  display: none; /* скрыто по умолчанию */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4); /* полупрозрачный черный цвет для заднего фона */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% от верхней и нижней части окна просмотра */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Ширина модального контейнера */
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный цвет */
+  display: none; /* По умолчанию скрыта */
+  z-index: 999; /* Находится выше всех других элементов */
+}

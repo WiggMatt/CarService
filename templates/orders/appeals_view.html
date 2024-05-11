@@ -1,0 +1,70 @@
+{% extends 'base_templates/base_layout.html' %}
+
+{% load static %}
+
+{% block title %} Ваши заявки {% endblock %}
+
+{% block styles %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/appeals_view.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+    {% include 'base_templates/base_account_header.html' with header_title="Ваши заявки" %}
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <a href="{% url 'create_appeal' %}" class="button">Создать заявку</a>
+        <table>
+            <thead>
+            <tr>
+                <th>Дата создания</th>
+                <th>Дата выбранная</th>
+                <th>Время выбранное</th>
+                <th>Комментарий</th>
+                <th>Автомобиль</th>
+                <th>Статус</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for appeal, orders in appeal_orders.items %}
+                {% if orders %}
+                    {% for order in orders %}
+                        {% if order.status == 'PENDING' or order.status == 'IN_PROGRESS' %}
+                            <tr>
+                                <td>{{ appeal.created_at }}</td>
+                                <td>{{ appeal.chosen_date }}</td>
+                                <td>{{ appeal.chosen_time }}</td>
+                                <td>{{ appeal.comment }}</td>
+                                <td>{{ appeal.car.brand }} {{ appeal.car.model }} {{ appeal.car.license_plate }}</td>
+                                <td>
+                                    {% if order.status == 'PENDING' %}
+                                        Принята
+                                    {% elif order.status == 'IN_PROGRESS' %}
+                                        В процессе
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <tr> 
+                        <td>{{ appeal.created_at }}</td>
+                        <td>{{ appeal.chosen_date }}</td>
+                        <td>{{ appeal.chosen_time }}</td>
+                        <td>{{ appeal.comment }}</td>
+                        <td>{{ appeal.car.brand }} {{ appeal.car.model }} {{ appeal.car.license_plate }}</td>
+                        <td>Создана</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'base_templates/base_layout.html' %}
+
+{% load static %}
+
+{% block title %} Полная информация о заявке {% endblock %}
+
+{% block styles %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/appeal_details.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+    {% include 'base_templates/base_staff_header.html' with header_title="Полная информация о заявке" %}
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+    <p><strong>Дата создания:</strong> {{ appeal.created_at }}</p>
+    <p><strong>Дата выбранная:</strong> {{ appeal.chosen_date }}</p>
+    <p><strong>Время выбранное:</strong> {{ appeal.chosen_time }}</p>
+    <p><strong>Комментарий:</strong> {{ appeal.comment }}</p>
+
+    <h2>Информация об автомобиле</h2>
+    <p><strong>Марка:</strong> {{ appeal.car.brand }}</p>
+    <p><strong>Модель:</strong> {{ appeal.car.model }}</p>
+    <p><strong>Госномер:</strong> {{ appeal.car.license_plate }}</p>
+    <p><strong>Год выпуска:</strong> {{ appeal.car.year_of_manufacture }}</p>
+    <p><strong>Цвет:</strong> {{ appeal.car.color }}</p>
+    <p><strong>VIN номер:</strong> {{ appeal.car.vin_number }}</p>
+
+    <h2>Информация о владельце</h2>
+    <p><strong>ФИО:</strong> {{ appeal.car.client.bio }}</p>
+    <p><strong>Электронная почта:</strong> {{ appeal.car.client.username }}</p>
+    <p><strong>Номер телефона:</strong> {{ appeal.car.client.phone_number }}</p>
+
+    <a class="action-button" href="{% url 'all_appeals' %}">Назад</a>
+
+    <button class="action-button"  type="button" onclick="openConfirmationModal()">Подтвердить</button>
+    </div>
+
+    <!-- Модальное окно для подтверждения заявки -->
+
+    <div id="confirmationModal" class="modal" style="display: none">
+        <div class="modal-overlay" onclick="">
+            <div class="modal-content">
+                <span class="close" onclick="closeConfirmationModal()">&times;</span>
+                <form id="confirmationForm" action="{% url 'update_appeal' appeal.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-info">
+                        <label for="chosenDate">Дата выбранная:</label>
+                        <input type="date" id="chosenDate" name="chosenDate"
+                               value="{{ appeal.chosen_date|date:'Y-m-d' }}">
+                    </div>
+
+                    <div class="modal-info">
+                        <label for="chosenTime">Время выбранное:</label>
+                        <input type="time" id="chosenTime" name="chosenTime" value="{{ appeal.chosen_time }}">
+                    </div>
+
+                    <div class="modal-info">
+                        <label for="mechanic">Выберите механика:</label>
+                        <select id="mechanic" name="mechanic">
+                            {% for mechanic in mechanics %}
+                                <option value="{{ mechanic.id }}">{{ mechanic.bio }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="modal-buttons">
+                        <button type="button" onclick="confirmAppointment()">Сохранить</button>
+                        <button type="button" onclick="closeConfirmationModal()">Отмена</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function openConfirmationModal() {
+            document.getElementById("confirmationModal").style.display = "block";
+        }
+
+        function closeConfirmationModal() {
+            document.getElementById("confirmationModal").style.display = "none";
+        }
+
+        function confirmAppointment() {
+            var form = document.getElementById("confirmationForm");
+            var formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Заявка успешно подтверждена');
+                        closeConfirmationModal();
+                        window.location.href = "{% url 'all_appeals' %}";
+                    } else {
+                        alert('Произошла ошибка при подтверждении заявки');
+                        console.error('Ошибка при подтверждении заявки:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка при выполнении запроса:', error);
+                });
+        }
+    </script>
+{% endblock %}

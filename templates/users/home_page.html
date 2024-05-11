@@ -1,0 +1,106 @@
+{% extends 'base_templates/base_layout.html' %}
+
+{% load static %}
+
+{% block title %} Главная страница {% endblock %}
+
+{% block styles %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home_page.css' %}">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+          rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+    {% include 'base_templates/base_header.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="hero">
+            <img class="hero-image" src="{% static 'image/main_bg.jpg' %}" alt=""> <!-- Мэйн картинка -->
+        </div>
+        <div class="promotions">
+            <h2>Акции</h2>
+            <div class="promotions-parent">
+                <div class="promotions-div1"><a href="#"><h3>Бонусная программа для юридических лиц</h3></a></div>
+                <!-- Ссылка  -->
+                <div class="promotions-div2"><a href="#"><h3>Проверьте авто за 0 рублей</h3></a></div> <!-- Ссылка  -->
+                <div class="promotions-div3"><a href="#"><h3>Бесплатная диагностика ходовой части</h3></a></div>
+                <!-- Ссылка  -->
+                <div class="promotions-div4"><a href="#"><h3>Комплексное техобслуживание (ТО) автомобиля</h3></a></div>
+                <!-- Ссылка  -->
+                <div class="promotions-div5"><a href="#"><h3>Бесплатная замена масла ДВС и фильтра</h3></a></div>
+                <!-- Ссылка  -->
+                <div class="promotions-div6"></div>
+                <div class="promotions-div7"></div>
+            </div>
+        </div>
+        <div id="serv" class="services">
+            <h2>Услуги</h2>
+            <div class="services-parent">
+                <div class="services-div1"><a href="#"><h3>Автосервис</h3></a></div> <!-- Ссылка  -->
+                <div class="services-div2"><a href="#"><h3>Диагностика</h3></a></div> <!-- Ссылка  -->
+                <div class="services-div3"><a href="#"><h3>Шиномонтаж</h3></a></div> <!-- Ссылка  -->
+                <div class="services-div4"><a href="#"><h3>Восстановление АКПП</h3></a></div> <!-- Ссылка  -->
+            </div>
+        </div>
+        <div class="about">
+            <div class="about-left">
+                <h1>Автосервис № 1 в России</h1> <!-- Текст  -->
+            </div>
+            <div class="about-right">
+                <p>
+                    — это не просто самая быстро растущая сеть
+                    автосервисов по всей России от Москвы до Владивостока.
+                    Это тысячи клиентов, которые нам доверяют.
+                    Это дружная команда людей, вдохновленных общей идеей и общим делом.
+                    Это строгие стандарты качества во всем и
+                    постоянная поддержка наших клиентов, где бы они ни находились.
+                </p> <!-- Текст  -->
+                {% if user.is_authenticated %}
+                    {% if not user.is_manager %}
+                        <button class="staff-button" onclick="showModal()">Для персонала</button>
+                    {% else %}
+                        <a href="{% url 'personal_check' %}">Для персонала</a> <!-- Ссылка, Текст  -->
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'personal-login' %}">Для персонала</a> <!-- Ссылка, Текст  -->
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <div class="modal" id="notificationModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p>Доступ только для персонала сайта.</p>
+        </div>
+    </div>
+
+    <div class="overlay" onclick="closeModal()"></div>
+
+
+    <!-- JavaScript-код для модального окна -->
+    <script>
+        function showModal() {
+            var modal = document.getElementById("notificationModal");
+            var overlay = document.querySelector(".overlay");
+            modal.style.display = "block";
+            overlay.style.display = "block";
+            document.body.style.overflow = "hidden"; /* Запретить прокрутку заднего фона */
+        }
+
+        function closeModal() {
+            var modal = document.getElementById("notificationModal");
+            var overlay = document.querySelector(".overlay");
+            modal.style.display = "none";
+            overlay.style.display = "none";
+            document.body.style.overflow = "auto"; /* Разрешить прокрутку заднего фона */
+        }
+    </script>
+{% endblock %}

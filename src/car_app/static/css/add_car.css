@@ -1,0 +1,86 @@
+* {
+    font-family: "Montserrat", sans-serif;
+}
+
+body {
+    margin: 0;
+    overflow-y: hidden;
+    background: url(../image/car-background.jpg);
+    background-size: 100%;
+}
+
+h2 {
+    text-align: center;
+
+    color: #faa404; /* Цвет заголовка */
+}
+
+form {
+    width: 30%;
+    margin: 150px auto;
+    padding: 30px;
+    background-color: #fff; /* Цвет формы */
+    border-radius: 10px; /* Скругление краев формы */
+    box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.1); /* Тень формы */
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    text-align: center;
+    font-size: 16px;
+    width: 100%; /* Учитываем padding и border */
+    height: 50px;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #f2f2f2;
+    border-radius: 10px; /* Скругление краев полей */
+    border: none;
+    box-sizing: border-box; /* Учитываем рамки и отступы внутри элемента */
+}
+
+button[type="submit"] {
+    font-size: 16px;
+    font-weight: bold;
+    height: 50px;
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 40px;
+    background-color: #faa404; /* Цвет кнопки */
+    color: white; /* Цвет текста кнопки */
+    border: none;
+    border-radius: 10px; /* Скругление краев кнопки */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Плавное изменение цвета при наведении */
+}
+
+button[type="submit"]:hover {
+    background-color: #f39000; /* Цвет кнопки при наведении */
+}
+
+button[type="submit"]:focus {
+    outline: none; /* Убираем обводку при фокусе */
+}
+
+button[type="button"] {
+    font-weight: bold;
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #616162; /* Цвет кнопки */
+    color: white; /* Цвет текста кнопки */
+    border: none;
+    border-radius: 5px; /* Скругление краев кнопки */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Плавное изменение цвета при наведении */
+}
+
+button[type="button"]:hover {
+    background-color: #4b4b4b; /* Цвет кнопки при наведении */
+}
+
+button[type="button"]:focus {
+    outline: none; /* Убираем обводку при фокусе */
+}

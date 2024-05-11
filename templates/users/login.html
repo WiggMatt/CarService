@@ -1,0 +1,45 @@
+{% extends 'base_templates/base_layout.html' %}
+
+{% load static %}
+
+{% block title %} Авторизация {% endblock %}
+
+{% block styles %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="header-content">
+        <a href="/" id="service-link">
+            <h1 id="service-title">SERVICE</h1>
+        </a>
+    </div>
+    
+    <div class="login-panel">
+        <form method="post">
+            <h2>Авторизация</h2>
+            {% csrf_token %}
+            <div class="input-group">
+
+                {{ form.username }}
+            </div>
+            <div class="input-group">
+
+                {{ form.password }}
+            </div>
+            <div class='center-button'>
+                <button type="submit">Войти</button>
+            </div>
+            <div class="reg-prompt">
+                <p class="re-text"><a class="reg-link" href="{% url 'registration' %}">Регистрация</a></p>
+            </div>
+
+        </form>
+    </div>
+{% endblock %}

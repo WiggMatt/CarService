@@ -1,0 +1,57 @@
+body {
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+}
+
+.content {
+    margin-top: 150px;
+    padding: 0 50px;
+    max-height: 500px; /* Высота контейнера с заявками */
+    overflow-y: auto;
+}
+
+.modal {
+    display: none; /* По умолчанию модальное окно скрыто */
+    position: fixed; /* Фиксированная позиция */
+    z-index: 1; /* Наиболее верхний уровень */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Добавляет прокрутку, если контент слишком высок */
+    background-color: rgba(0, 0, 0, 0.4); /* Черный цвет с небольшой прозрачностью */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% сверху и снизу, автоматическое выравнивание по горизонтали */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Ширина модального окна */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.appeal-block {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.appeal-info {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
