@@ -1,0 +1,42 @@
+{% extends 'base_templates/base_layout.html' %}
+
+{% load static %}
+
+{% block title %} Ваши заявки {% endblock %}
+
+{% block styles %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/client_order.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+    {% include 'base_templates/base_account_header.html' with header_title="Ваши заявки" %}
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <a href="{% url 'create_order' %}" class="button">Создать заявку</a>
+    <div class="order-cards">
+        {% for order in client_orders %}
+            <div class="order-card">
+                <div class="order-card-header">
+                    <h3>Заявка №{{ order.id }}</h3>
+                    <span class="order-status {{ order.status|lower }}">{{ order.get_status_display }}</span>
+                </div>
+                <div class="order-card-body">
+                    <p><strong>Дата создания:</strong> {{ order.created_at }}</p>
+                    <p><strong>Дата выбранная:</strong> {{ order.chosen_date }}</p>
+                    <p><strong>Время выбранное:</strong> {{ order.chosen_time }}</p>
+                    <p><strong>Комментарий:</strong> {{ order.comment }}</p>
+                    <p><strong>Автомобиль:</strong> {{ order.car.brand }} {{ order.car.model }} {{ order.car.license_plate }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

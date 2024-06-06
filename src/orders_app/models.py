@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 
 from src.users_app.models import Manager, Mechanic
@@ -19,20 +21,27 @@ class OrderSpecification(models.Model):
 
 
 class Order(models.Model):
+    created_at = models.DateTimeField("Дата создания заявки", auto_now_add=True)
+    chosen_date = models.DateField("Дата выбранная пользователем")
+    chosen_time = models.TimeField("Время выбранное пользователем", null=True)
+    desired_service = models.CharField(max_length=150, verbose_name='Желаемая услуга', blank=True, null=True)
+    comment = models.TextField("Комментарий клиента", blank=True, null=True)
     car = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name='Автомобиль')
     status_choices = [
+        ('AWAITING_CONFIRMATION', 'Ожидает подтверждения'),
         ('PENDING', 'Ожидает выполнения'),
+        ('WAITING_CAR', 'Ожидает автомобиля'),
         ('IN_PROGRESS', 'В процессе выполнения'),
         ('COMPLETED', 'Выполнен'),
     ]
-    status = models.CharField(max_length=20, choices=status_choices, default='PENDING',
+    status = models.CharField(max_length=100, choices=status_choices, default='AWAITING_CONFIRMATION',
                               verbose_name='Статус выполнения')
+    manager = models.ForeignKey(Manager, on_delete=models.CASCADE, verbose_name="Идентификатор менеджера",
+                                blank=True, null=True)
     final_cost = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Конечная стоимость', blank=True,
                                      null=True)
     end_date = models.DateField(verbose_name='Дата окончания выполнения', blank=True, null=True)
     end_time = models.TimeField(verbose_name='Время окончания выполнения', blank=True, null=True)
-    appeal = models.ForeignKey('Appeal', on_delete=models.SET_NULL, verbose_name='Заявка', blank=True, null=True)
-    name_of_the_responsible_mechanic = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return f"Заказ для {self.car}"
@@ -40,21 +49,3 @@ class Order(models.Model):
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
-
-
-class Appeal(models.Model):
-    created_at = models.DateTimeField("Дата создания заявки", auto_now_add=True)
-    chosen_date = models.DateField("Дата выбранная пользователем")
-    chosen_time = models.TimeField("Время выбранное пользователем")
-    comment = models.TextField("Комментарий клиента", blank=True)
-    car = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name="Идентификатор авто")
-    manager = models.ForeignKey(Manager, on_delete=models.CASCADE, verbose_name="Идентификатор менеджера",
-                                blank=True, null=True)
-    is_processed = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"Заявка от {self.created_at} для авто {self.car}"
-
-    class Meta:
-        verbose_name = "Заявка"
-        verbose_name_plural = "Заявки"

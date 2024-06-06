@@ -7,7 +7,7 @@ from .models import Client
 class RegistrationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Client
-        fields = ['bio', 'username', 'phone_number', 'password1', 'password2']
+        fields = ['bio', 'username', 'phone_number', 'license_num', 'password1', 'password2']
 
     def save(self, commit=True):
         user = super().save(commit=False)

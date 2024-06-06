@@ -1,0 +1,125 @@
+{% extends 'base_templates/base_layout.html' %}
+
+{% load static %}
+
+{% block title %} Регистрация авто и клиентов {% endblock %}
+
+{% block styles %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/order_detail.css' %}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+    <style>
+        body {
+            font-family: "Montserrat", sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 100px;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        button {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
+
+{% block header %}
+    {% include 'base_templates/base_staff_header.html' with header_title="Регистрация клиента и авто" %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if message %}
+        <div class="alert alert-info">{{ message }}</div>
+    {% endif %}
+    <form method="POST" id="registrationForm">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="register_car_only">Зарегистрировать только авто:</label>
+            <input type="checkbox" id="register_car_only" name="register_car_only" onchange="toggleClientFields()">
+        </div>
+        <div id="clientFields">
+            {{ client_form.as_p }}
+        </div>
+        <div id="selectClientLabel" style="display: none;">
+            <div class="form-group">
+                <label for="client">Выберите клиента:</label>
+                <select class="form-control" name="client" id="client">
+                    {% for client in clients %}
+                        <option value="{{ client.id }}">{{ client.bio }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            {{ car_form.as_p }}
+        </div>
+        <button type="button" class="btn btn-primary" onclick="submitForm()">Зарегистрировать</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#client').select2();
+        toggleClientFields(); // Initial call to set the proper state of client fields
+    });
+
+    function toggleClientFields() {
+        var clientFields = document.getElementById('clientFields');
+        var selectClientLabel = document.getElementById('selectClientLabel');
+        var registerCarOnlyCheckbox = document.getElementById('register_car_only');
+        if (registerCarOnlyCheckbox.checked) {
+            clientFields.style.display = 'none';
+            selectClientLabel.style.display = 'block';
+        } else {
+            clientFields.style.display = 'block';
+            selectClientLabel.style.display = 'none';
+        }
+    }
+
+    function submitForm() {
+        // Check the state of the checkbox
+        var registerCarOnlyCheckbox = document.getElementById('register_car_only');
+        if (registerCarOnlyCheckbox.checked) {
+            // Hide client fields before submitting if "Register Car Only" is checked
+            document.getElementById('clientFields').style.display = 'none';
+        }
+
+        // Submit the form
+        document.getElementById('registrationForm').submit();
+    }
+</script>
+{% endblock %}

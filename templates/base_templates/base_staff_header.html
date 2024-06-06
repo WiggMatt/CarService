@@ -1,5 +1,6 @@
 <style>
     header {
+        z-index: 999;
         position: fixed;
         top: 0;
         width: 100%;
@@ -129,9 +130,9 @@
             </button>
             <div class="dropdown-content">
                 <a href="/">На глвную</a>
-                <a href="{% url 'all_appeals' %}">Заявки</a>
-                <a href="{% url 'all_orders' %}">Заказы</a>
-                <a href="{% url 'mechanic_schedule_list' %}">Расписание</a>
+                <a href="{% url 'register_client_and_car' %}">Регистрация клиентов</a>
+                <a href="{% url 'manager_orders' %}">Заявки</a>
+                <a href="#">Расписание</a>
                 <a href="{% url 'logout' %}">Выйти</a>
             </div>
         </div>

@@ -3,9 +3,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('registration/', views.registration, name='registration'),  # Маршрут для страницы регистрации
-    path('login/', views.login_user, name='login'),  # Маршрут для страницы авторизации
+    path('registration/', views.client_registration_view, name='registration'),
+    path('login/', views.client_login_view, name='login'),
     path('logout/', views.logout_view,  name='logout'),
-    path('personal-login', views.custom_login, name='personal-login'),
-    path('personal-check/', views.personal_check, name='personal_check'),  # Маршрут для персональной страницы
+    path('personal-login', views.manager_login_view, name='personal-login'),
+    path('personal-check/', views.personal_check, name='personal_check'),
 ]

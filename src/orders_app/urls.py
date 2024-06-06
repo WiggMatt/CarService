@@ -3,16 +3,15 @@ from . import views
 
 urlpatterns = [
     # Для клиента
-    path('appeals/', views.appeals_view, name='appeals_view'),
-    path('appeals/create_appeal/', views.create_appeal, name='create_appeal'),
-    path('appeals/history/', views.appeals_history, name='appeals_history'),
+    path('appeals/', views.client_order_view, name='client_order'),
+    path('appeals/create_appeal/', views.create_order_view, name='create_order'),
+    path('appeals/history/', views.order_history_view, name='orders_history'),
 
     # Для менеджера
-    path('all-appeals/', views.all_appeals_view, name='all_appeals'),
-    path('appeal/<int:appeal_id>/', views.appeal_details, name='appeal_details'),
-    path('update_appeal/<int:appeal_id>/', views.update_appeal, name='update_appeal'),
-    path('all-appeals/search/', views.appeal_list, name='appeal_list'),
-    path('all-orders/', views.all_orders_view, name='all_orders'),
-    path('order/<int:order_id>/', views.order_details, name='order_details'),
-    path('update_order_status/<int:order_id>/', views.update_order_status, name='update_order_status'),
+    path('orders/', views.manager_orders_view, name='manager_orders'),
+    path('orders/<int:order_id>/', views.order_details_view, name='order_details'),
+    path('orders/search/', views.orders_search_view, name='orders_search'),
+    path('generate_work_order_pdf/<int:order_id>/', views.generate_work_order_pdf, name='generate_work_order_pdf'),
+    path('register-client-and-car/', views.register_client_and_car_view, name='register_client_and_car'),
+    path('create-order/', views.create_order_by_manager_view, name='create_order_by_manager'),
 ]

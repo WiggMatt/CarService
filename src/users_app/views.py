@@ -1,14 +1,11 @@
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib import messages
 
 
 from src.users_app.forms import RegistrationForm, LoginForm
 
 
-def registration(request):
+def client_registration_view(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
@@ -30,7 +27,7 @@ def main_view(request):
     return render(request, '../templates/users/home_page.html')
 
 
-def login_user(request):
+def client_login_view(request):
     if request.method == 'POST':
         form = LoginForm(request, request.POST)
         if form.is_valid():
@@ -46,7 +43,7 @@ def login_user(request):
     return render(request, '../templates/users/login.html', {'form': form})
 
 
-def custom_login(request):
+def manager_login_view(request):
     if request.method == 'POST':
         form = LoginForm(request, request.POST)
         if form.is_valid():
@@ -55,16 +52,15 @@ def custom_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('all_appeals')
+                return redirect('manager_orders')
     else:
         form = LoginForm()
     return render(request, '../templates/users/personal_login.html', {'form': form})
 
 
-@login_required
 def personal_check(request):
     if request.user.is_manager:
-        return redirect('all_appeals')
+        return redirect('manager_orders')
 
 
 

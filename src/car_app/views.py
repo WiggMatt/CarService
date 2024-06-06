@@ -48,9 +48,9 @@ def garage_view(request):
 
 
 @login_required
-def car_list(request):
+def car_list_view(request):
     form = CarSearchForm(request.GET)
-    cars = Car.objects.all()
+    cars = Car.objects.filter(client=request.user)
 
     if form.is_valid():
         search_query = form.cleaned_data.get('search_query')

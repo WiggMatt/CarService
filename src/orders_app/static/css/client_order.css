@@ -1,0 +1,135 @@
+body {
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+}
+
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    overflow: hidden;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+a.button {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #faa404;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+a.button:hover {
+    background-color: #f39000;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 170px;
+}
+
+.button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.order-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.order-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-status {
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.order-status.awaiting_confirmation {
+    background-color: rgb(112, 112, 112);
+    box-shadow: 0 0 10px #707070FF;
+}
+
+.order-status.pending {
+    background-color: #ff6347;
+    box-shadow: 0 0 10px #ff6347;
+}
+
+.order-status.waiting_car {
+    background-color: #1e90ff;
+    box-shadow: 0 0 10px #1e90ff;
+}
+
+.order-status.in_progress {
+    background-color: #32cd32;
+    box-shadow: 0 0 10px #32cd32;
+}
+
+.order-card-body {
+    margin-top: 10px;
+}
+
+.order-card-body p {
+    margin: 5px 0;
+}
+

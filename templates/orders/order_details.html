@@ -1,0 +1,239 @@
+{% extends 'base_templates/base_layout.html' %}
+{% load static %}
+
+{% block title %} Полная информация о заявке {% endblock %}
+
+{% block styles %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/appeal_details.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+    {% include 'base_templates/base_staff_header.html' with header_title="Полная информация о заявке" %}
+{% endblock %}
+
+{% block content %}
+    <div class="main-content">
+        <p><strong>Дата создания:</strong> {{ order.created_at }}</p>
+        <p><strong>Дата выбранная:</strong> {{ order.chosen_date }}</p>
+        <p><strong>Время выбранное:</strong> {{ order.chosen_time }}</p>
+        <p><strong>Комментарий:</strong> {{ order.comment }}</p>
+
+        <h2>Информация об автомобиле</h2>
+        <p><strong>Марка:</strong> {{ order.car.brand }}</p>
+        <p><strong>Модель:</strong> {{ order.car.model }}</p>
+        <p><strong>Госномер:</strong> {{ order.car.license_plate }}</p>
+        <p><strong>Год выпуска:</strong> {{ order.car.year_of_manufacture }}</p>
+        <p><strong>Цвет:</strong> {{ order.car.color }}</p>
+        <p><strong>VIN номер:</strong> {{ order.car.vin_number }}</p>
+
+        <h2>Информация о владельце</h2>
+        <p><strong>ФИО:</strong> {{ order.car.client.bio }}</p>
+        <p><strong>Электронная почта:</strong> {{ order.car.client.username }}</p>
+        <p><strong>Номер телефона:</strong> {{ order.car.client.phone_number }}</p>
+
+        <a class="action-button" href="{% url 'manager_orders' %}">Назад</a>
+
+        {% if order.status == 'WAITING_CAR' %}
+            <button class="action-button" type="button" onclick="changeOrderStatus('PENDING')">Принять автомобиль</button>
+        {% elif order.status == 'PENDING' %}
+            <button class="action-button" type="button" onclick="changeOrderStatus('IN_PROGRESS')">В работу</button>
+        {% elif order.status == 'IN_PROGRESS' %}
+            <button class="action-button" type="button" onclick="changeOrderStatus('COMPLETED')">Завершить заказ</button>
+        {% elif order.status == 'COMPLETED' %}
+            <div class="completed-services">
+                <h2>Выполненные услуги</h2>
+                <ul>
+                    {% for spec in order_specifications %}
+                        <li>{{ spec.service.name }} ({{ spec.mechanic.bio }})</li>
+                    {% endfor %}
+                </ul>
+                <h2>Оставленные рекомендации</h2>
+                <ul>
+                    {% for recommendation in recommendations %}
+                        <li>{{ recommendation.comment }} - {{ recommendation.date }} - {% if recommendation.service %}
+                            {{ recommendation.service.name }}
+                        {% else %}
+                            Общий комментарий
+                        {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+                <a href="{% url 'generate_work_order_pdf' order.id %}" class="action-button">Сформировать заказ-наряд</a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if order.status == 'IN_PROGRESS' %}
+        <div class="sidebar">
+            <form id="addServiceForm" onsubmit="addService(event)">
+                <h2>Добавить услугу</h2>
+                <select name="service_id" id="serviceSelect" onchange="updateMechanics()" required>
+                    <option value="" disabled selected>Выберите услугу</option>
+                    {% for service in services %}
+                        <option value="{{ service.id }}" data-group="{{ service.service_group.id }}">{{ service.name }}</option>
+                    {% endfor %}
+                </select>
+                <select name="mechanic_id" id="mechanicSelect" required>
+                    <option value="" disabled selected>Выберите механика</option>
+                    {% for mechanic in mechanics %}
+                        <option value="{{ mechanic.id }}" data-groups="{{ mechanic.get_service_groups }}">{{ mechanic.bio }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="action-button">Добавить услугу</button>
+            </form>
+
+            <div class="added-services">
+                <h2>Добавленные услуги</h2>
+                <div id="servicesList">
+                    {% for spec in order_specifications %}
+                        <div class="service-item">
+                            <span>{{ spec.service.name }} ({{ spec.mechanic.bio }})</span>
+                            <form method="post" onsubmit="removeService(event, {{ spec.id }})">
+                                {% csrf_token %}
+                                <button type="submit" class="action-button">Удалить</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="recommendations">
+                <h2>Рекомендации</h2>
+                <ul>
+                    {% for recommendation in recommendations %}
+                        <li>{{ recommendation.comment }} - {{ recommendation.date }} - {% if recommendation.service %}
+                            {{ recommendation.service.name }}
+                        {% else %}
+                            Общий комментарий
+                        {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <form id="addRecommendationForm" onsubmit="addRecommendation(event)">
+                    <h2>Добавить рекомендацию</h2>
+                    <select name="service_id" id="recommendationServiceSelect">
+                        <option value="" disabled selected>Выберите услугу (если применимо)</option>
+                        {% for service in services %}
+                            <option value="{{ service.id }}">{{ service.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="text" name="comment" placeholder="Комментарий" required>
+                    <input type="date" name="date" required>
+                    <button type="submit" class="action-button">Добавить рекомендацию</button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+
+    <script>
+        function updateMechanics() {
+            var serviceSelect = document.getElementById('serviceSelect');
+            var selectedServiceGroup = serviceSelect.options[serviceSelect.selectedIndex].getAttribute('data-group');
+
+            var mechanicSelect = document.getElementById('mechanicSelect');
+            mechanicSelect.innerHTML = '<option value="" disabled selected>Выберите механика</option>';
+
+            {% for mechanic in mechanics %}
+                {% for specialization in mechanic.mechanicspecialization_set.all %}
+                    if (selectedServiceGroup == '{{ specialization.service_group.id }}') {
+                        var option = document.createElement('option');
+                        option.value = '{{ mechanic.id }}';
+                        option.textContent = '{{ mechanic.bio }}';
+                        mechanicSelect.appendChild(option);
+                    }
+                {% endfor %}
+            {% endfor %}
+        }
+
+        function changeOrderStatus(newStatus) {
+            var formData = new FormData();
+            formData.append('action', 'change_status');
+            formData.append('new_status', newStatus);
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            fetch('', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        window.location.reload();
+                    } else {
+                        alert('Произошла ошибка');
+                        console.error('Ошибка:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+        }
+
+        function addService(event) {
+            event.preventDefault();
+            var formData = new FormData(document.getElementById('addServiceForm'));
+            formData.append('action', 'add_service');
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            fetch('', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        window.location.reload();
+                    } else {
+                        alert('Произошла ошибка');
+                        console.error('Ошибка:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+        }
+
+        function addRecommendation(event) {
+            event.preventDefault();
+            var formData = new FormData(document.getElementById('addRecommendationForm'));
+            formData.append('action', 'add_recommendation');
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            fetch('', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        window.location.reload();
+                    } else {
+                        alert('Произошла ошибка');
+                        console.error('Ошибка:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+        }
+    </script>
+{% endblock %}

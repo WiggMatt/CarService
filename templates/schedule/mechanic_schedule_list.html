@@ -1,15 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Mechanic Schedule List</title>
+    <title>Schedule</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #schedule-container {
+            width: 80%;
+            margin: auto;
+        }
+
+        #schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #schedule-table th, #schedule-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #schedule-table th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+
+        .shift {
+            background-color: #e7f3fe;
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+        button {
+            margin: 5px 0;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #modal-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            background-color: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Mechanic Schedule List</h1>
-    <ul>
-        {% for schedule in schedules %}
-            <li><a href="{% url 'mechanic_schedule_detail' schedule.id %}">{{ schedule }}</a></li>
+<h1>Mechanic Schedule</h1>
+<div id="schedule-container">
+    <table id="schedule-table">
+        <thead>
+        <tr>
+            <th>Mechanic</th>
+            {% for day in shifts.values_list('day_of_week', flat=True).distinct %}
+                <th>{{ day }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for mechanic in mechanics %}
+            <tr>
+                <td>{{ mechanic.name }}</td>
+                {% for shift in shifts %}
+                    <td>
+                        {% for schedule in schedules %}
+                            {% if schedule.mechanic == mechanic and schedule.shift == shift %}
+                                <div class="shift">
+                                    {{ schedule.shift.start_time }} - {{ schedule.shift.end_time }}
+                                    <button class="edit-shift" data-id="{{ schedule.id }}">Edit</button>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <button class="add-shift" data-mechanic="{{ mechanic.id }}" data-shift="{{ shift.id }}">Add
+                        </button>
+                    </td>
+                {% endfor %}
+            </tr>
         {% endfor %}
-    </ul>
+        </tbody>
+    </table>
+</div>
+
+<div id="modal-container" style="display:none;">
+    <!-- Modal content will be loaded here via AJAX -->
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.add-shift').click(function () {
+            let mechanicId = $(this).data('mechanic');
+            let shiftId = $(this).data('shift');
+            $.get('/add-schedule/', {mechanic: mechanicId, shift: shiftId}, function (data) {
+                $('#modal-container').html(data).show();
+            });
+        });
+
+        $('.edit-shift').click(function () {
+            let scheduleId = $(this).data('id');
+            $.get('/edit-schedule/', {id: scheduleId}, function (data) {
+                $('#modal-container').html(data).show();
+            });
+        });
+
+        $(document).on('submit', '#schedule-form', function (e) {
+            e.preventDefault();
+            $.post($(this).attr('action'), $(this).serialize(), function (data) {
+                if (data.success) {
+                    location.reload();
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

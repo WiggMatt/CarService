@@ -1,106 +1,189 @@
 {% extends 'base_templates/base_layout.html' %}
-
 {% load static %}
 
-{% block title %} История обслуживания {% endblock %}
+{% block title %} История Обслуживания Клиента {% endblock %}
 
 {% block styles %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/service_history.css' %}">
+    <link rel="stylesheet" type="text/css" href="#">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
           rel="stylesheet">
+    <style>
+        /* CSS стили для дизайна страницы */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .order-card:hover {
+            background-color: #f9f9f9;
+        }
+
+        .order-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .order-date {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .order-status {
+            font-weight: bold;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 {% endblock %}
 
 {% block header %}
-    {% include 'base_templates/base_account_header.html' with header_title="История обслуживания" %}
+    {% include 'base_templates/base_account_header.html' with header_title="История Обслуживания Клиента" %}
 {% endblock %}
 
 {% block content %}
-    <div class="content">
-        {% for appeal, orders in appeal_orders.items %}
-            {% for order in orders %}
-                {% if order.status == 'COMPLETED' %}
-                    <div class="appeal-block">
-                        <div class="appeal-info">Заявка от {{ appeal.created_at }}</div>
-                        <div class="appeal-info">Автомобиль: {{ appeal.car.brand }} {{ appeal.car.model }} {{ appeal.car.license_plate }}</div>
-                        <div class="appeal-info">Комментарий: {{ appeal.comment }}</div>
-                        <button class="show-info-btn"
-                                data-appeal-id="{{ appeal.id }}"
-                                data-mechanic="{{ order.name_of_the_responsible_mechanic }}"
-                                data-services="{% for spec in order.orderspecification_set.all %}{{ spec.service.name }}: {{ spec.service.price }} ₽{% if not forloop.last %}; {% endif %}{% endfor %}"
-                                data-final-cost="{{ order.final_cost }} ₽"
-                                data-end-date="{{ order.end_date }}"
-                        >Показать</button>
+    <body>
+    <div class="container">
+        <h1>Service History</h1>
+        {% if client_orders %}
+            {% for order in client_orders %}
+                <div class="order-card" onclick="openModal('{{ order.id }}')">
+                    <div class="order-info">
+                        <div class="order-date">{{ order.chosen_date|date:"D, d M Y" }}</div>
+                        <div class="order-status">{{ order.status }}</div>
                     </div>
-                {% endif %}
+                    <p><strong>Car:</strong> {{ order.car }}</p>
+                    <p><strong>Comment:</strong> {{ order.comment }}</p>
+                </div>
             {% endfor %}
-        {% endfor %}
+        {% else %}
+            <p>No orders found.</p>
+        {% endif %}
     </div>
 
-    <div id="modal" class="modal">
+    <!-- Модальное окно -->
+    <div id="myModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Дополнительная информация о заявке</h2>
-            <p><strong>Механик:</strong> <span id="modal-mechanic"></span></p>
-            <p><strong>Услуги:</strong></p>
-            <ul id="modal-services"></ul>
-            <p><strong>Конечная стоимость:</strong> <span id="modal-final-cost"></span></p>
-            <p><strong>Дата завершения:</strong> <span id="modal-end-date"></span></p>
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-content">
+                <h2>Order Details</h2>
+                <p><strong>Date:</strong> <span id="order-date"></span></p>
+                <p><strong>Status:</strong> <span id="order-status"></span></p>
+                <p><strong>Car:</strong> <span id="order-car"></span></p>
+                <p><strong>Comment:</strong> <span id="order-comment"></span></p>
+                <h3>Services</h3>
+                <ul id="order-services"></ul>
+                <p><strong>Total Price:</strong> <span id="order-total-price"></span></p>
+            </div>
         </div>
     </div>
 
     <script>
-        // Получение модального окна
-        var modal = document.getElementById('modal');
+        function openModal(orderId) {
+            console.log("openModal called with orderId: " + orderId);
+            var modal = document.getElementById("myModal");
 
-        // Получение кнопки, которая открывает модальное окно
-        var btns = document.querySelectorAll('.show-info-btn');
+            // AJAX запрос для получения дополнительной информации о заказе
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var orderDetails = JSON.parse(this.responseText);
+                    console.log(orderDetails);
 
-        // Получение элемента для закрытия модального окна
-        var span = document.getElementsByClassName("close")[0];
+                    document.getElementById("order-date").textContent = orderDetails.chosen_date;
+                    document.getElementById("order-status").textContent = orderDetails.status;
+                    document.getElementById("order-car").textContent = orderDetails.car;
+                    document.getElementById("order-comment").textContent = orderDetails.comment;
+                    document.getElementById("order-total-price").textContent = orderDetails.total_price;
 
-        // Когда пользователь нажимает на кнопку, открываем модальное окно
-        btns.forEach(function(btn) {
-        btn.onclick = function() {
-            var mechanic = this.getAttribute('data-mechanic');
-            var servicesWithCost = this.getAttribute('data-services').split(';');
-            var finalCost = this.getAttribute('data-final-cost');
-            var endDate = this.getAttribute('data-end-date');
+                    var servicesList = document.getElementById("order-services");
+                    servicesList.innerHTML = "";  // Clear previous content
+                    orderDetails.services.forEach(function (service) {
+                        var listItem = document.createElement("li");
+                        listItem.textContent = service.name + ": " + service.price + " (" + service.date + ")";
+                        servicesList.appendChild(listItem);
+                    });
 
-            var modalMechanic = document.getElementById('modal-mechanic');
-            var modalServices = document.getElementById('modal-services');
-            var modalFinalCost = document.getElementById('modal-final-cost');
-            var modalEndDate = document.getElementById('modal-end-date');
-
-            modalMechanic.textContent = mechanic;
-            modalFinalCost.textContent = finalCost;
-            modalEndDate.textContent = endDate;
-
-            modalServices.innerHTML = '';
-            servicesWithCost.forEach(function(serviceWithCost) {
-                var serviceCost = serviceWithCost.split(':');
-                var listItem = document.createElement('li');
-                listItem.textContent = serviceCost[0] + ': ' + serviceCost[1];
-                modalServices.appendChild(listItem);
-            });
-
-            modal.style.display = "block";
+                    modal.style.display = "block";
+                }
+            };
+            xhr.open("GET", "/order_details/" + orderId, true);
+            xhr.send();
         }
-    });
 
-        // Когда пользователь нажимает на элемент для закрытия, закрываем модальное окно
-        span.onclick = function () {
+        function closeModal() {
+            var modal = document.getElementById("myModal");
             modal.style.display = "none";
         }
 
-        // Когда пользователь нажимает вне модального окна, закрываем его
+        // Закрытие модального окна при клике вне его области
         window.onclick = function (event) {
-            if (event.target === modal) {
+            var modal = document.getElementById("myModal");
+            if (event.target == modal) {
                 modal.style.display = "none";
             }
         }
     </script>
+
+    </body>
 {% endblock %}
