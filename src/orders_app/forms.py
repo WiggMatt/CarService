@@ -37,10 +37,6 @@ class OrderForm(forms.ModelForm):
         return chosen_date
 
 
-class OrderSearchForm(forms.Form):
-    search_query = forms.CharField(label='Поиск', required=False)
-
-
 class OrderFormManager(forms.ModelForm):
     class Meta:
         model = Order

@@ -1,27 +1,23 @@
 from datetime import datetime, date
 
-from django.contrib import messages
-
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum, Q
+from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch, cm, mm
+from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
 from reportlab.platypus import Table, Spacer, SimpleDocTemplate, Paragraph, TableStyle
 
 from src.users_app.models import Mechanic, Manager, CustomUser, Client
 from src.car_app.models import Car, Recommendation
 from src.services_app.models import Service
-from .forms import OrderForm, OrderSearchForm
-from .models import Order, OrderSpecification
+from .forms import OrderForm
+from .models import Order
 from ..car_app.forms import AddCarForm
 from ..users_app.forms import RegistrationForm
 
@@ -214,8 +210,32 @@ def generate_work_order_pdf(request, order_id):
 
 @login_required
 def manager_orders_view(request):
-    orders = Order.objects.all().order_by('-created_at')
-    return render(request, '../templates/orders/manager_orders.html', {'orders': orders})
+    search_query = request.GET.get('search_query')
+    search_date = request.GET.get('search_date')
+    orders = Order.objects.all()
+
+    if search_query:
+        orders = orders.filter(
+            Q(created_at__icontains=search_query) |
+            Q(chosen_date__icontains=search_query) |
+            Q(chosen_time__icontains=search_query) |
+            Q(car__brand__icontains=search_query) |
+            Q(car__model__icontains=search_query) |
+            Q(car__license_plate__icontains=search_query) |
+            Q(car__client__bio__icontains=search_query)
+        )
+
+    if search_date:
+        try:
+            search_date = datetime.strptime(search_date, '%Y-%m-%d').date()
+        except ValueError:
+            search_date = None
+
+        if search_date:
+            orders = orders.filter(chosen_date=search_date)
+
+    return render(request, 'orders/manager_orders.html', {'orders': orders})
+
 
 
 @csrf_exempt
@@ -270,41 +290,6 @@ def order_details_view(request, order_id):
         'order_specifications': order_specifications,
         'recommendations': recommendations,
     })
-
-
-@login_required
-def orders_search_view(request):
-    form = OrderSearchForm(request.GET)
-
-    # Получение всех заявок
-    orders = Order.objects.all()
-
-    if form.is_valid():
-        search_query = form.cleaned_data.get('search_query')
-        search_date = request.GET.get('search_date')  # Получение введенной даты из запроса
-        if search_query:
-            orders = orders.filter(
-                Q(created_at__icontains=search_query) |
-                Q(chosen_date__icontains=search_query) |
-                Q(chosen_time__icontains=search_query) |
-                Q(car__brand__icontains=search_query) |
-                Q(car__model__icontains=search_query) |
-                Q(car__license_plate__icontains=search_query) |
-                Q(car__client__bio__icontains=search_query)
-            )
-            # Если дата указана, применяем фильтр по дате
-        if search_date:
-            # Попытка преобразовать строку с датой в объект datetime
-            try:
-                search_date = datetime.strptime(search_date, '%Y-%m-%d').date()
-            except ValueError:
-                search_date = None
-
-            # Если преобразование удалось, фильтруем по выбранной дате
-            if search_date:
-                orders = orders.filter(chosen_date=search_date)
-
-    return render(request, '../templates/orders/manager_orders.html', {'form': form, 'orders': orders})
 
 
 @login_required

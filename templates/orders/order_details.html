@@ -39,12 +39,16 @@
 
         <a class="action-button" href="{% url 'manager_orders' %}">Назад</a>
 
-        {% if order.status == 'WAITING_CAR' %}
-            <button class="action-button" type="button" onclick="changeOrderStatus('PENDING')">Принять автомобиль</button>
+        {% if order.status == 'AWAITING_CONFIRMATION' %}
+        <button class="action-button" type="button" onclick="changeOrderStatus('WAITING_CAR')">Подтвердить</button>
+        {% elif order.status == 'WAITING_CAR' %}
+            <button class="action-button" type="button" onclick="changeOrderStatus('PENDING')">Принять автомобиль
+            </button>
         {% elif order.status == 'PENDING' %}
             <button class="action-button" type="button" onclick="changeOrderStatus('IN_PROGRESS')">В работу</button>
         {% elif order.status == 'IN_PROGRESS' %}
-            <button class="action-button" type="button" onclick="changeOrderStatus('COMPLETED')">Завершить заказ</button>
+            <button class="action-button" type="button" onclick="changeOrderStatus('COMPLETED')">Завершить заказ
+            </button>
         {% elif order.status == 'COMPLETED' %}
             <div class="completed-services">
                 <h2>Выполненные услуги</h2>
@@ -64,7 +68,8 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <a href="{% url 'generate_work_order_pdf' order.id %}" class="action-button">Сформировать заказ-наряд</a>
+                <a href="{% url 'generate_work_order_pdf' order.id %}" class="action-button">Сформировать
+                    заказ-наряд</a>
             </div>
         {% endif %}
     </div>
@@ -76,13 +81,15 @@
                 <select name="service_id" id="serviceSelect" onchange="updateMechanics()" required>
                     <option value="" disabled selected>Выберите услугу</option>
                     {% for service in services %}
-                        <option value="{{ service.id }}" data-group="{{ service.service_group.id }}">{{ service.name }}</option>
+                        <option value="{{ service.id }}"
+                                data-group="{{ service.service_group.id }}">{{ service.name }}</option>
                     {% endfor %}
                 </select>
                 <select name="mechanic_id" id="mechanicSelect" required>
                     <option value="" disabled selected>Выберите механика</option>
                     {% for mechanic in mechanics %}
-                        <option value="{{ mechanic.id }}" data-groups="{{ mechanic.get_service_groups }}">{{ mechanic.bio }}</option>
+                        <option value="{{ mechanic.id }}"
+                                data-groups="{{ mechanic.get_service_groups }}">{{ mechanic.bio }}</option>
                     {% endfor %}
                 </select>
                 <button type="submit" class="action-button">Добавить услугу</button>

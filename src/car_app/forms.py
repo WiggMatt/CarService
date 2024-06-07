@@ -28,6 +28,3 @@ class UpdateCarForm(forms.ModelForm):
         }
 
 
-class CarSearchForm(forms.Form):
-    search_query = forms.CharField(label='Поиск', required=False)
-

@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import AddCarForm, UpdateCarForm, CarSearchForm
+from .forms import AddCarForm, UpdateCarForm
 from .models import Car
 
 
@@ -43,29 +43,20 @@ def update_car_view(request, car_id):
 
 @login_required
 def garage_view(request):
+    search_query = request.GET.get('search_query')
     cars = Car.objects.filter(client=request.user)
+
+    if search_query:
+        cars = cars.filter(
+            Q(sts__icontains=search_query) |
+            Q(brand__icontains=search_query) |
+            Q(model__icontains=search_query) |
+            Q(body_type__icontains=search_query) |
+            Q(license_plate__icontains=search_query) |
+            Q(color__icontains=search_query) |
+            Q(vin_number__icontains=search_query) |
+            Q(year_of_manufacture__icontains=search_query)
+        )
+
     return render(request, '../templates/сars/garage.html', {'cars': cars})
-
-
-@login_required
-def car_list_view(request):
-    form = CarSearchForm(request.GET)
-    cars = Car.objects.filter(client=request.user)
-
-    if form.is_valid():
-        search_query = form.cleaned_data.get('search_query')
-        if search_query:
-            cars = cars.filter(
-                Q(sts__icontains=search_query) |
-                Q(brand__icontains=search_query) |
-                Q(model__icontains=search_query) |
-                Q(body_type__icontains=search_query) |
-                Q(license_plate__icontains=search_query) |
-                Q(color__icontains=search_query) |
-                Q(vin_number__icontains=search_query) |
-                Q(year_of_manufacture__icontains=search_query)
-            )
-
-    return render(request, '../templates/сars/garage.html', {'form': form, 'cars': cars})
-
 
