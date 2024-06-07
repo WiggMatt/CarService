@@ -8,6 +8,32 @@ class RegistrationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Client
         fields = ['bio', 'username', 'phone_number', 'license_num', 'password1', 'password2']
+        widgets = {
+            'bio': forms.TextInput(attrs={
+                'placeholder': 'ФИО',
+                'class': 'form-control'
+            }),
+            'username': forms.TextInput(attrs={
+                'placeholder': 'Эл. почта',
+                'class': 'form-control'
+            }),
+            'phone_number': forms.TextInput(attrs={
+                'placeholder': 'Номер телефона',
+                'class': 'form-control'
+            }),
+            'license_num': forms.TextInput(attrs={
+                'placeholder': 'Номер ВУ',
+                'class': 'form-control'
+            }),
+            'password1': forms.PasswordInput(attrs={
+                'placeholder': 'Пароль',
+                'class': 'form-control'
+            }),
+            'password2': forms.PasswordInput(attrs={
+                'placeholder': 'Повтор пароля',
+                'class': 'form-control'
+            })
+        }
 
     def save(self, commit=True):
         user = super().save(commit=False)

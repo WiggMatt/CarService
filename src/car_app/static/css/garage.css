@@ -77,3 +77,33 @@ a.button:hover {
     border: none;
     font-size: 30px;
 }
+
+.search-button{
+    margin-left: 20px;
+    display: inline-block;
+    text-decoration: none;
+    background-color: #ffffff;
+    color: #faa404;
+    border: 1px solid #faa404;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+form{
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+form input{
+    height: 18px;
+    border-radius: 10px;
+    border: 0;
+    padding: 10px 20px;
+    background-color: #ededed;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 0.875rem;
+    color: black;
+    text-align: center;
+}

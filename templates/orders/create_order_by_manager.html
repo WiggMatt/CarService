@@ -51,6 +51,11 @@
         button:hover {
             background-color: #0056b3;
         }
+
+        form p{
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 {% endblock %}
 
@@ -62,40 +67,50 @@
     <div class="container">
         <form method="post" action="{% url 'create_order_by_manager' %}">
             {% csrf_token %}
-            <label for="client-select">Выберите клиента:</label>
-            <select id="client-select" name="client_id" class="form-control select2">
-                <option value="">Выберите клиента</option>
-                {% for client in clients %}
-                    <option value="{{ client.id }}">{{ client.bio }}</option>
-                {% endfor %}
-            </select>
+            <div style="display: flex; flex-direction: column">
+                <label for="client-select">Выберите клиента:</label>
+                <select id="client-select" name="client_id" class="form-control select2">
+                    <option value="">Выберите клиента</option>
+                    {% for client in clients %}
+                        <option value="{{ client.id }}">{{ client.bio }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-            <label for="car-select">Выберите автомобиль:</label>
-            <select id="car-select" name="car_id" class="form-control select2">
-                <option value="">Выберите автомобиль</option>
-                <!-- Options will be populated via AJAX -->
-            </select>
+            <div style="display: flex; flex-direction: column">
+                <label for="car-select">Выберите автомобиль:</label>
+                <select id="car-select" name="car_id" class="form-control select2">
+                    <option value="">Выберите автомобиль</option>
+                    <!-- Options will be populated via AJAX -->
+                </select>
+            </div>
 
-            <label for="chosen-date">Желаемая дата:</label>
-            <input type="date" id="chosen-date" name="chosen_date" required min="{{ today }}">
+            <div style="display: flex; flex-direction: column">
+                <label for="chosen-date">Желаемая дата:</label>
+                <input type="date" id="chosen-date" name="chosen_date" required min="{{ today }}">
+            </div>
+            <div style="display: flex; flex-direction: column">
+                <label for="chosen-time">Желаемое время:</label>
+                <select id="chosen-time" name="chosen_time" class="form-control select2" required>
+                    <option value="">Выберите время</option>
+                    {% for time in time_choices %}
+                        <option value="{{ time.0 }}">{{ time.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="comment">Комментарий:</label>
+                <textarea id="comment" name="comment" class="form-control"></textarea>
+            </div>
+            <div style="display: flex; flex-direction: column">
+                <label for="status-select">Статус заказа:</label>
+                <select id="status-select" name="status" class="form-control select2">
+                    {% for status in statuses %}
+                        <option value="{{ status.0 }}">{{ status.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-            <label for="chosen-time">Желаемое время:</label>
-            <select id="chosen-time" name="chosen_time" class="form-control select2" required>
-                <option value="">Выберите время</option>
-                {% for time in time_choices %}
-                    <option value="{{ time.0 }}">{{ time.1 }}</option>
-                {% endfor %}
-            </select>
-
-            <label for="comment">Комментарий:</label>
-            <textarea id="comment" name="comment" class="form-control"></textarea>
-
-            <label for="status-select">Статус заказа:</label>
-            <select id="status-select" name="status" class="form-control select2">
-                {% for status in statuses %}
-                    <option value="{{ status.0 }}">{{ status.1 }}</option>
-                {% endfor %}
-            </select>
 
             <button type="submit">Создать заказ</button>
         </form>

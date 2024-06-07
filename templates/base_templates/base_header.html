@@ -90,7 +90,13 @@
     <a href="/"><img src="{% static 'image/Vector-logo.svg' %}" alt="logo"></a> <!-- Лого, Ссылка  -->
 </div>
 <div class="navbar">
-    <a href="#">Услуги</a> <!-- Ссылка  -->
+    <a href="#">Услуги</a>
+    {% if user.is_authenticated %}
+        {% if user.is_client %}
+            <a href="{% url 'garage' %}">Гараж</a>
+            <a href="{% url 'client_order' %}">Заявки</a>
+        {% endif %}
+    {% endif %}<!-- Ссылка  -->
     {% if user.is_authenticated %}
         <div class="dropdown">
             <a class="dropbtn">{{ user.username }}</a>
