@@ -28,17 +28,27 @@ body {
     color: inherit; /* Наследуем цвет текста при наведении */
 }
 
+.center-label{
+    display: flex;
+    align-items: center;
+}
 
 .reg-panel {
+    width: 20%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 10%;
+    margin-top: 70px;
     background-color: white;
     border-radius: 25px;
     box-shadow: 0px 5px 10px 2px rgba(97, 97, 97, 0.2);
     padding: 35px;
     font-family: "Montserrat", 'sans-serif';
+}
+
+.reg-panel label{
+    text-align: center;
+    margin: 0 auto;
 }
 
 .input-group {
@@ -63,15 +73,19 @@ body {
 .input-group input[type="text"],
 .input-group input[type="email"],
 .input-group input[type="password"] {
-    width: calc(100% - 25px); /* Ширина поля ввода (вычисляемая, минус отступы) */
-    padding: 10px; /* Внутренние отступы текстовых полей */
-    border-radius: 10px; /* Закругление углов текстовых полей */
-    border: 0; /* Границы текстовых полей */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+     height: 50px;
+    width: 300px;
+    border-radius: 10px;
+    border: 0;
     background-color: #ededed;
     font-family: 'Nunito Sans', sans-serif;
     font-size: 0.875rem;
     color: black;
-    box-shadow: 0px 5px 10px -4px rgba(97, 97, 97, 0.2) inset;
+    text-align: center;
 }
 .reg-prompt{
     margin-top: 20px;

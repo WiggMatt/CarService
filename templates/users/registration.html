@@ -26,31 +26,32 @@
             <h2>Регистрация</h2>
             {% csrf_token %}
             <div class="input-group">
-                <label for="id_password2">ФИО</label>
+
                 {{ form.bio }}
             </div>
             <div class="input-group">
-                <label for="id_password2">Эл.почта</label>
+
                 {{ form.username }}
             </div>
             <div class="input-group">
-                <label for="id_password2">Номер телефона</label>
+
                 {{ form.phone_number }}
             </div>
             <div class="input-group">
-                <label for="id_password2">Номер ВУ</label>
+
                 {{ form.license_num }}
             </div>
             <div class="input-group">
-                <label for="id_password2">Пароль</label>
+
                 {{ form.password1 }}
             </div>
             <div class="input-group">
-                <label for="id_password2">Повтор пароля</label>
+
                 {{ form.password2 }}
             </div>
+
             <div class='center-button'>
-                <button type="submit">Register</button>
+                <button type="submit">Зарегистироваться</button>
             </div>
             <div class="reg-prompt">
                 <p class="re-text"><a class="reg-link" href="{% url 'login' %}">Авторизация</a></p>

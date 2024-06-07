@@ -23,8 +23,8 @@
         <div class="form-and-button">
             <form method="GET" action="{% url 'orders_search' %}">
                 {{ form.as_p }}
-                <input type="date" id="search_date" name="search_date">
-                <button type="submit">Фильтровать</button>
+                <input class="input-filter" type="date" id="search_date" name="search_date">
+                <button class="filter" type="submit">Фильтровать</button>
             </form>
             <a class="create-order-button" href="{% url 'create_order_by_manager' %}">Создать заявку</a>
         </div>

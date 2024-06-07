@@ -23,7 +23,7 @@
         <a href="{% url 'add_car' %}" class="button">Добавить авто</a>
         <form method="GET" action="{% url 'car_list' %}">
             {{ form.as_p }}
-            <button type="submit">Искать</button>
+            <button class="search-button" type="submit">Искать</button>
         </form>
         <table>
             <thead>
