@@ -15,17 +15,20 @@
 {% endblock %}
 
 {% block header %}
-    {% include 'base_templates/base_header.html' %}
+        {% include 'base_templates/base_header.html' %}
 {% endblock %}
 
 {% block content %}
     <div class="content">
-        <button id="addCarBtn" class="button">Добавить авто</button>
-        <form id="searchForm" method="GET" action=".">
-            <input type="text" name="search_query" placeholder="Поиск..." value="{{ request.GET.search_query }}">
-            <button type="submit">Искать</button>
-            <button type="button" id="clearFiltersBtn" onclick="clearFilters()">Отменить фильтры</button>
+        <div class="butons" style="display: flex; justify-content: space-between">
+            <form id="searchForm" method="GET" action=".">
+            <input  type="text" name="search_query" placeholder="Поиск..." value="{{ request.GET.search_query }}">
+            <button class="search-button" type="submit">Искать</button>
+            <button class="filter-button" type="button" id="clearFiltersBtn" onclick="clearFilters()">Отменить фильтры</button>
         </form>
+        <button id="addCarBtn" class="button-add">Добавить авто</button>
+        </div>
+        
         <table>
             <thead>
             <tr>
@@ -53,10 +56,12 @@
                     <td>{{ car.year_of_manufacture }}</td>
                     <td>
                         <div class="action-buttons">
-                            <a class="body-button" href="{% url 'update_car' car.id %}"><i class='bx bx-edit-alt'></i></a>
+                            <a class="body-button" href="{% url 'update_car' car.id %}"><i
+                                    class='bx bx-edit-alt'></i></a>
                             <form id="delete-form-{{ car.id }}" action="{% url 'delete_car' car.id %}" method="post">
                                 {% csrf_token %}
-                                <button type="button" onclick="confirmDelete('{{ car.id }}')"><i class='bx bx-trash'></i></button>
+                                <button type="button" onclick="confirmDelete('{{ car.id }}')"><i
+                                        class='bx bx-trash'></i></button>
                             </form>
                         </div>
                     </td>
@@ -69,19 +74,30 @@
     <!-- Модальное окно для добавления автомобиля -->
     <div id="addCarModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <form id="addCarForm" method="post" action="{% url 'garage' %}">
+            <div class="head" style="display: flex; justify-content: space-between">
                 <h2>Добавить авто в гараж</h2>
+                <span class="close">&times;</span>
+            </div>
+
+
+            <form style="display: flex; justify-content: center" id="addCarForm" method="post"
+                  action="{% url 'garage' %}">
+
                 {% csrf_token %}
-                <input type="text" id="sts" name="sts" required placeholder="СТС">
-                <input type="text" id="brand" name="brand" required placeholder="Марка">
-                <input type="text" id="model" name="model" required placeholder="Модель">
-                <input type="text" id="body_type" name="body_type" required placeholder="Тип кузова">
-                <input type="text" id="license_plate" name="license_plate" required placeholder="Государственный номер">
-                <input type="text" id="color" name="color" required placeholder="Цвет">
-                <input type="text" id="vin_number" name="vin_number" required placeholder="VIN номер">
-                <input type="number" id="year_of_manufacture" name="year_of_manufacture" required placeholder="Год выпуска">
-                <button type="submit">Добавить</button>
+                <div class="inputs" style="display: flex;flex-direction: column; width: 100%">
+                    <input type="text" id="sts" name="sts" required placeholder="СТС">
+                    <input type="text" id="brand" name="brand" required placeholder="Марка">
+                    <input type="text" id="model" name="model" required placeholder="Модель">
+                    <input type="text" id="body_type" name="body_type" required placeholder="Тип кузова">
+                    <input type="text" id="license_plate" name="license_plate" required
+                           placeholder="Государственный номер">
+                    <input type="text" id="color" name="color" required placeholder="Цвет">
+                    <input type="text" id="vin_number" name="vin_number" required placeholder="VIN номер">
+                    <input type="number" id="year_of_manufacture" name="year_of_manufacture" required
+                           placeholder="Год выпуска">
+                    <button type="submit">Добавить</button>
+                </div>
+
             </form>
         </div>
     </div>
@@ -103,25 +119,25 @@
         var btn = document.getElementById("addCarBtn");
         var span = document.getElementsByClassName("close")[0];
 
-        btn.onclick = function() {
+        btn.onclick = function () {
             modal.style.display = "block";
         }
 
-        span.onclick = function() {
+        span.onclick = function () {
             modal.style.display = "none";
         }
 
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
             }
         }
 
-        document.getElementById("addCarForm").onsubmit = function(event) {
+        document.getElementById("addCarForm").onsubmit = function (event) {
             event.preventDefault();
             var form = event.target;
             var formData = new FormData(form);
-            
+
             fetch(form.action, {
                 method: 'POST',
                 body: formData,
@@ -129,19 +145,19 @@
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    alert(data.message);
-                    modal.style.display = "none";
-                    location.reload(); // Обновление страницы для отображения нового автомобиля
-                } else if (data.errors) {
-                    alert("Произошла ошибка при добавлении автомобиля.");
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message);
+                        modal.style.display = "none";
+                        location.reload(); // Обновление страницы для отображения нового автомобиля
+                    } else if (data.errors) {
+                        alert("Произошла ошибка при добавлении автомобиля.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
         }
     </script>
 {% endblock %}

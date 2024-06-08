@@ -22,10 +22,10 @@
     <div class="content">
         <div class="form-and-button">
             <form id="searchForm" method="GET" action=".">
-                <input type="date" id="search_date" name="search_date" value="{{ request.GET.search_date }}">
-                <input type="text" name="search_query" placeholder="Поиск..." value="{{ request.GET.search_query }}">
-                <button type="button" onclick="submitForm()">Искать</button>
-                <button type="button" onclick="clearFilters()">Отменить фильтры</button>
+                <input class="input-label" type="date" id="search_date" name="search_date" value="{{ request.GET.search_date }}">
+                <input  class="input-label" type="text" name="search_query" placeholder="Поиск..." value="{{ request.GET.search_query }}">
+                <button class="search-button" type="button" onclick="submitForm()">Искать</button>
+                <button class="cancel-button" type="button" onclick="clearFilters()">Отменить фильтры</button>
             </form>
             <a class="create-order-button" href="{% url 'create_order_by_manager' %}">Создать заявку</a>
         </div>

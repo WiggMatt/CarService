@@ -83,7 +83,7 @@ th.sortable:hover {
     margin-left: 5px;
 }
 
-.filter{
+.cancel-button{
     display: inline-block;
     text-decoration: none;
     background-color: #ffffff;
@@ -92,16 +92,27 @@ th.sortable:hover {
     padding: 10px 20px;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    cursor: pointer;
 }
 
-.input-filter{
+.search-button{
+    display: inline-block;
+    text-decoration: none;
+    background-color: #faa404;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.input-label{
     height: 18px;
     border-radius: 10px;
     border: 0;
     padding: 10px 20px;
     background-color: #ededed;
-
-
     color: black;
     text-align: center;
 }

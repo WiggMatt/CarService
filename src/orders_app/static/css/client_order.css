@@ -8,6 +8,10 @@ h1 {
     margin-bottom: 20px;
 }
 
+header{
+    margin: 0 231.5px;
+}
+
 .content {
     display: flex;
     flex-direction: column;
@@ -39,6 +43,7 @@ h1 {
     margin: 10px 0 20px 260px;
     cursor: pointer;
     border-radius: 5px;
+    border: none;
 }
 
 .order-card {

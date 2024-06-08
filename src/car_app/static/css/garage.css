@@ -3,7 +3,12 @@
 }
 
 body {
+
     margin: 0;
+}
+
+header{
+    margin: 0 231.5px;
 }
 
 .content {
@@ -78,8 +83,20 @@ a.button:hover {
     font-size: 30px;
 }
 
-.search-button {
-    margin-left: 20px;
+.search-button , .button-add {
+    border: none;
+    margin-left: 10px;
+    display: inline-block;
+    text-decoration: none;
+    background-color: #faa404;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.filter-button{
+    margin-left: 10px;
     display: inline-block;
     text-decoration: none;
     background-color: #ffffff;
@@ -156,8 +173,9 @@ form input {
 }
 
 .modal-content input {
+
     width: 100%;
-    padding: 10px;
+    padding: 20px 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
