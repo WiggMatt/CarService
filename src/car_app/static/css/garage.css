@@ -65,6 +65,7 @@ a.button:hover {
 .action-buttons {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .action-buttons i {
@@ -108,7 +109,7 @@ a.button:hover {
 }
 
 form {
-    margin-top: 10px;
+
     display: flex;
     align-items: center;
 }

@@ -51,8 +51,8 @@
             <h2>Запишитесь на СТО в Казани</h2>
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Записаться на СТО</button>
-            <button type="button" onclick="window.history.back()">Назад</button>
+            <button class="search-button" type="submit">Записаться на СТО</button>
+            <button class="filter-button" type="button" onclick="window.history.back()">Назад</button>
         </form>
     </div>
 </div>

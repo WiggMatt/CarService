@@ -118,8 +118,9 @@ header{
 }
 
 .modal-content {
+    margin: 100px auto;
     background-color: #fefefe;
-    margin: auto;
+
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
@@ -140,4 +141,55 @@ header{
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+form h2{
+    margin-top:0;
+}
+
+form p{
+    display: flex;
+    flex-direction: column;
+}
+
+form input{
+    border-radius: 10px;
+    border: 1px solid #aaaaaa;
+    padding: 10px 10px;
+}
+
+form select{
+    border-radius: 10px;
+    border: 1px solid #aaaaaa;
+    padding: 10px 10px;
+}
+
+form textarea{
+    border-radius: 10px;
+    border: 1px solid #aaaaaa;
+    padding: 10px 10px;
+    resize: none;
+}
+
+.search-button{
+    border: none;
+    display: inline-block;
+    text-decoration: none;
+    background-color: #faa404;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.filter-button{
+    margin-left: 10px;
+    display: inline-block;
+    text-decoration: none;
+    background-color: #ffffff;
+    color: #faa404;
+    border: 1px solid #faa404;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
