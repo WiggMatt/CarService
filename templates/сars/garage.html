@@ -15,16 +15,16 @@
 {% endblock %}
 
 {% block header %}
-    {% include 'base_templates/base_account_header.html' with header_title="Ваши авто" %}
+    {% include 'base_templates/base_header.html' %}
 {% endblock %}
 
 {% block content %}
     <div class="content">
-        <a href="{% url 'add_car' %}" class="button">Добавить авто</a>
+        <button id="addCarBtn" class="button">Добавить авто</button>
         <form id="searchForm" method="GET" action=".">
             <input type="text" name="search_query" placeholder="Поиск..." value="{{ request.GET.search_query }}">
             <button type="submit">Искать</button>
-            <button type="button" onclick="clearFilters()">Отменить фильтры</button>
+            <button type="button" id="clearFiltersBtn" onclick="clearFilters()">Отменить фильтры</button>
         </form>
         <table>
             <thead>
@@ -66,6 +66,26 @@
         </table>
     </div>
 
+    <!-- Модальное окно для добавления автомобиля -->
+    <div id="addCarModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="addCarForm" method="post" action="{% url 'garage' %}">
+                <h2>Добавить авто в гараж</h2>
+                {% csrf_token %}
+                <input type="text" id="sts" name="sts" required placeholder="СТС">
+                <input type="text" id="brand" name="brand" required placeholder="Марка">
+                <input type="text" id="model" name="model" required placeholder="Модель">
+                <input type="text" id="body_type" name="body_type" required placeholder="Тип кузова">
+                <input type="text" id="license_plate" name="license_plate" required placeholder="Государственный номер">
+                <input type="text" id="color" name="color" required placeholder="Цвет">
+                <input type="text" id="vin_number" name="vin_number" required placeholder="VIN номер">
+                <input type="number" id="year_of_manufacture" name="year_of_manufacture" required placeholder="Год выпуска">
+                <button type="submit">Добавить</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         function clearFilters() {
             document.getElementsByName('search_query')[0].value = '';
@@ -77,6 +97,51 @@
                 document.getElementById('delete-form-' + carId).submit();
             }
         }
-    </script>
 
+        // Скрипт для работы с модальным окном
+        var modal = document.getElementById("addCarModal");
+        var btn = document.getElementById("addCarBtn");
+        var span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        document.getElementById("addCarForm").onsubmit = function(event) {
+            event.preventDefault();
+            var form = event.target;
+            var formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    modal.style.display = "none";
+                    location.reload(); // Обновление страницы для отображения нового автомобиля
+                } else if (data.errors) {
+                    alert("Произошла ошибка при добавлении автомобиля.");
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+            });
+        }
+    </script>
 {% endblock %}

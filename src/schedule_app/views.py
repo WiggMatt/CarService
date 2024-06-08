@@ -1,23 +1,24 @@
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .forms import MechanicScheduleForm
 from .models import MechanicSchedule, Shift
-from ..users_app.models import Mechanic
 
 
-def schedule_view(request):
-    mechanics = Mechanic.objects.all()
+def manage_schedule(request):
+    if request.method == 'POST':
+        schedule_form = MechanicScheduleForm(request.POST, prefix='schedule')
+
+        if schedule_form.is_valid():
+            schedule_form.save()
+            return redirect('manage_schedule')
+    else:
+        schedule_form = MechanicScheduleForm(prefix='schedule')
+
     shifts = Shift.objects.all()
     schedules = MechanicSchedule.objects.all()
-    return render(request, '../templates/schedule/mechanic_schedule_list.html', {'mechanics': mechanics, 'shifts': shifts, 'schedules': schedules})
 
-def add_schedule(request):
-    if request.method == 'POST':
-        form = MechanicScheduleForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'success': True})
-    else:
-        form = MechanicScheduleForm()
-    return render(request, '../templates/schedule/mechanic_schedule_list.html', {'form': form})
+    return render(request, '../templates/schedule/mechanic_schedule_list.html', {
+        'schedule_form': schedule_form,
+        'shifts': shifts,
+        'schedules': schedules
+    })

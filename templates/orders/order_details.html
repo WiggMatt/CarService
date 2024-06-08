@@ -9,8 +9,46 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 {% endblock %}
 
 {% block header %}
@@ -41,35 +79,34 @@
             <a class="action-button" href="{% url 'manager_orders' %}">Назад</a>
         </div>
         <div class="another-info">
-            {% if order.status == 'WAITING_CAR' %}
-                <button class="action-button" type="button" onclick="changeOrderStatus('PENDING')">Принять автомобиль
-                </button>
+            {% if order.status == 'AWAITING_CONFIRMATION' %}
+                <button class="action-button" type="button" onclick="openConfirmModal()">Подтвердить</button>
+            {% elif order.status == 'WAITING_CAR' %}
+                <button class="action-button" type="button" onclick="changeOrderStatus('PENDING')">Принять автомобиль</button>
             {% elif order.status == 'PENDING' %}
                 <button class="action-button" type="button" onclick="changeOrderStatus('IN_PROGRESS')">В работу</button>
             {% elif order.status == 'IN_PROGRESS' %}
                 <div class="sidebar">
-                    <form  id="addServiceForm" onsubmit="addService(event)">
+                    <form id="addServiceForm" onsubmit="addService(event)">
                         <h2>Добавить услугу</h2>
                         <div class="selects" style="display: flex">
                             <select name="service_id" id="serviceSelect" onchange="updateMechanics()" required>
-                            <option value="" disabled selected>Выберите услугу</option>
-                            {% for service in services %}
-                                <option value="{{ service.id }}"
-                                        data-group="{{ service.service_group.id }}">{{ service.name }}</option>
-                            {% endfor %}
-                        </select>
-                        <select name="mechanic_id" id="mechanicSelect" required>
-                            <option value="" disabled selected>Выберите механика</option>
-                            {% for mechanic in mechanics %}
-                                <option value="{{ mechanic.id }}"
-                                        data-groups="{{ mechanic.get_service_groups }}">{{ mechanic.bio }}</option>
-                            {% endfor %}
-                        </select>
+                                <option value="" disabled selected>Выберите услугу</option>
+                                {% for service in services %}
+                                    <option value="{{ service.id }}" data-group="{{ service.service_group.id }}">{{ service.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <select name="mechanic_id" id="mechanicSelect" required>
+                                <option value="" disabled selected>Выберите механика</option>
+                                {% for mechanic in mechanics %}
+                                    <option value="{{ mechanic.id }}" data-groups="{{ mechanic.get_service_groups }}">{{ mechanic.bio }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
-                        
+
                         <button type="submit" class="action-button">Добавить услугу</button>
                     </form>
-                        
+
                     <div class="added-services">
                         <h2>Добавленные услуги</h2>
                         <div id="servicesList">
@@ -86,39 +123,39 @@
                     </div>
 
                     <div class="recommendations">
-
-
                         <form id="addRecommendationForm" onsubmit="addRecommendation(event)">
                             <h2>Добавить рекомендацию</h2>
                             <div class="selects">
                                 <select name="service_id" id="recommendationServiceSelect">
-                                <option value="" disabled selected>Выберите услугу (если применимо)</option>
-                                {% for service in services %}
-                                    <option value="{{ service.id }}">{{ service.name }}</option>
-                                {% endfor %}
-                            </select>
-                            <input type="text" name="comment" placeholder="Комментарий" required>
+                                    <option value="" disabled selected>Выберите услугу (если применимо)</option>
+                                    {% for service in services %}
+                                        <option value="{{ service.id }}">{{ service.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="text" name="comment" placeholder="Комментарий" required>
                             </div>
-                            
-                           
                             <button type="submit" class="action-button">Добавить рекомендацию</button>
                         </form>
                         <h2>Рекомендации</h2>
                         <ul>
                             {% for recommendation in recommendations %}
-                                <li>{{ recommendation.comment }} - {{ recommendation.date }} -
+                                <li>
+                                    {{ recommendation.comment }} - {{ recommendation.date }} -
                                     {% if recommendation.service %}
-                                        {{ recommendation.service.name }}
+                                        {{ recommendation.service.name }} ({{ recommendation.service.price }} руб.)
                                     {% else %}
                                         Общий комментарий
                                     {% endif %}
+                                    <form method="post" onsubmit="removeRecommendation(event, {{ recommendation.id }})">
+                                        {% csrf_token %}
+                                        <button type="submit" class="action-button">Удалить</button>
+                                    </form>
                                 </li>
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
-                <button class="action-button" type="button" onclick="changeOrderStatus('COMPLETED')">Завершить заказ
-                </button>
+                <button class="action-button" type="button" onclick="changeOrderStatus('COMPLETED')">Завершить заказ</button>
             {% elif order.status == 'COMPLETED' %}
                 <div class="completed-services">
                     <h2>Выполненные услуги</h2>
@@ -139,17 +176,66 @@
                             </li>
                         {% endfor %}
                     </ul>
-                    <a href="{% url 'generate_work_order_pdf' order.id %}" class="action-button">Сформировать
-                        заказ-наряд</a>
+                    <a href="{% url 'generate_work_order_pdf' order.id %}" class="action-button">Сформировать заказ-наряд</a>
                 </div>
             {% endif %}
         </div>
 
-
     </div>
 
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeConfirmModal()">&times;</span>
+            <h2>Подтверждение заказа</h2>
+            <form id="confirmOrderForm" onsubmit="confirmOrder(event)">
+                <label for="chosenDate">Выберите дату:</label>
+                <input type="date" id="chosenDate" name="chosen_date" value="{{ order.chosen_date }}" required>
+                <label for="chosenTime">Выберите время:</label>
+                <input type="time" id="chosenTime" name="chosen_time" value="{{ order.chosen_time }}" required>
+                <button type="submit" class="action-button">Подтвердить</button>
+            </form>
+        </div>
+    </div>
 
     <script>
+        function openConfirmModal() {
+            var modal = document.getElementById("confirmModal");
+            modal.style.display = "block";
+        }
+
+        function closeConfirmModal() {
+            var modal = document.getElementById("confirmModal");
+            modal.style.display = "none";
+        }
+
+        function confirmOrder(event) {
+            event.preventDefault();
+            var formData = new FormData(document.getElementById('confirmOrderForm'));
+            formData.append('action', 'confirm_order');
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            fetch('', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        window.location.reload();
+                    } else {
+                        alert('Произошла ошибка');
+                        console.error('Ошибка:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+        }
+
         function updateMechanics() {
             var serviceSelect = document.getElementById('serviceSelect');
             var selectedServiceGroup = serviceSelect.options[serviceSelect.selectedIndex].getAttribute('data-group');
@@ -159,7 +245,7 @@
 
             {% for mechanic in mechanics %}
                 {% for specialization in mechanic.mechanicspecialization_set.all %}
-                    if (selectedServiceGroup == '{{ specialization.service_group.id }}') {
+                    if (selectedServiceGroup === '{{ specialization.service_group.id }}') {
                         var option = document.createElement('option');
                         option.value = '{{ mechanic.id }}';
                         option.textContent = '{{ mechanic.bio }}';
@@ -225,10 +311,11 @@
                 });
         }
 
-        function addRecommendation(event) {
+        function removeService(event, serviceId) {
             event.preventDefault();
-            var formData = new FormData(document.getElementById('addRecommendationForm'));
-            formData.append('action', 'add_recommendation');
+            var formData = new FormData();
+            formData.append('action', 'remove_service');
+            formData.append('service_id', serviceId);
             formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 
             fetch('', {
@@ -252,5 +339,63 @@
                     console.error('Ошибка:', error);
                 });
         }
+
+        function addRecommendation(event) {
+            event.preventDefault();
+            var formData = new FormData(document.getElementById('addRecommendationForm'));
+            formData.append('action', 'add_recommendation');
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            fetch('', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        window.location.replace(window.location.href);
+                    } else {
+                        alert('Произошла ошибка: ' + data.message);
+                        console.error('Ошибка:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+        }
+
+        function removeRecommendation(event, recommendationId) {
+            event.preventDefault();
+            var formData = new FormData();
+            formData.append('action', 'remove_recommendation');
+            formData.append('recommendation_id', recommendationId);
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            fetch('', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        window.location.replace(window.location.href);
+                    } else {
+                        alert('Произошла ошибка: ' + data.message);
+                        console.error('Ошибка:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+        }
+
     </script>
 {% endblock %}

@@ -17,14 +17,17 @@ from src.users_app.models import Mechanic, Manager, CustomUser, Client
 from src.car_app.models import Car, Recommendation
 from src.services_app.models import Service
 from .forms import OrderForm
-from .models import Order
+from .models import Order, OrderSpecification
 from ..car_app.forms import AddCarForm
 from ..users_app.forms import RegistrationForm
 
 
 # ////////////////////////// Для клиента //////////////////////////////
 @login_required
-def create_order_view(request):
+def client_order_view(request):
+    client = request.user
+    client_orders = Order.objects.filter(car__client=client).exclude(status='COMPLETED')
+
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
@@ -33,25 +36,36 @@ def create_order_view(request):
     else:
         user_cars = Car.objects.filter(client=request.user)
         form = OrderForm(user=request.user, cars=user_cars)
-    return render(request, '../templates/orders/create_order.html', {'form': form})
-
-
-@login_required
-def client_order_view(request):
-    client = request.user
-    client_orders = Order.objects.filter(car__client=client).exclude(status='COMPLETED')
 
     return render(request, '../templates/orders/client_order.html', {
         'client_orders': client_orders,
+        'form': form,
     })
 
 
 @login_required
 def order_history_view(request):
     user = request.user
-    # Получаем все завершенные заказы для автомобилей текущего клиента
-    client_orders = Order.objects.filter(car__client=user, status='COMPLETED').order_by('-created_at')
 
+    if 'order_id' in request.GET:
+        order_id = request.GET.get('order_id')
+        order = Order.objects.get(id=order_id)
+        order_specs = OrderSpecification.objects.filter(order=order)
+        services = [{'name': spec.service.name, 'price': spec.service.price, 'date': spec.order.chosen_date} for spec in
+                    order_specs]
+
+        order_details = {
+            'chosen_date': order.chosen_date,
+            'status': order.status,
+            'car': str(order.car),
+            'comment': order.comment,
+            'total_price': order.final_cost,
+            'services': services,
+        }
+
+        return JsonResponse(order_details)
+
+    client_orders = Order.objects.filter(car__client=user, status='COMPLETED').order_by('-created_at')
     return render(request, '../templates/orders/service_history.html', {'client_orders': client_orders})
 
 
@@ -237,7 +251,6 @@ def manager_orders_view(request):
     return render(request, 'orders/manager_orders.html', {'orders': orders})
 
 
-
 @csrf_exempt
 def order_details_view(request, order_id):
     order = get_object_or_404(Order, id=order_id)
@@ -253,35 +266,63 @@ def order_details_view(request, order_id):
             order.save()
             return JsonResponse({'success': True, 'message': 'Статус заказа обновлен'})
 
+        elif request.POST.get('action') == 'confirm_order':
+            chosen_date = request.POST.get('chosen_date')
+            chosen_time = request.POST.get('chosen_time')
+            order.chosen_date = chosen_date
+            order.chosen_time = chosen_time
+            order.status = 'WAITING_CAR'
+            order.save()
+            return JsonResponse({'success': True, 'message': 'Заказ подтвержден и обновлен'})
+
         elif request.POST.get('action') == 'add_service':
             service_id = request.POST.get('service_id')
             mechanic_id = request.POST.get('mechanic_id')
             service = get_object_or_404(Service, id=service_id)
             mechanic = get_object_or_404(Mechanic, id=mechanic_id)
+
+            # Проверка на дублирование
+            if order.orderspecification_set.filter(service=service, mechanic=mechanic).exists():
+                return JsonResponse({'success': False, 'message': 'Эта услуга уже добавлена'})
+
             order.orderspecification_set.create(service=service, mechanic=mechanic)
 
-            # If the order is in progress, allow adding recommendations
             if order.status == 'IN_PROGRESS':
                 return JsonResponse({'success': True, 'message': 'Услуга добавлена', 'allow_recommendations': True})
             else:
                 return JsonResponse({'success': True, 'message': 'Услуга добавлена', 'allow_recommendations': False})
 
+        elif request.POST.get('action') == 'remove_service':
+            service_id = request.POST.get('service_id')
+            order_spec = get_object_or_404(OrderSpecification, id=service_id)
+            order_spec.delete()
+            return JsonResponse({'success': True, 'message': 'Услуга удалена'})
+
         elif request.POST.get('action') == 'add_recommendation':
             service_id = request.POST.get('service_id')
             comment = request.POST.get('comment')
-            date = request.POST.get('date')
-
             service = None
+
             if service_id:
                 service = get_object_or_404(Service, id=service_id)
+
+            # Проверка на дублирование
+            if order.car.recommendations.filter(service=service, comment=comment).exists():
+                return JsonResponse({'success': False, 'message': 'Эта рекомендация уже добавлена'})
 
             Recommendation.objects.create(
                 car=order.car,
                 service=service,
                 comment=comment,
-                date=date
+                date=datetime.now()  # Установка текущей даты
             )
             return JsonResponse({'success': True, 'message': 'Рекомендация добавлена'})
+
+        elif request.POST.get('action') == 'remove_recommendation':
+            recommendation_id = request.POST.get('recommendation_id')
+            recommendation = get_object_or_404(Recommendation, id=recommendation_id)
+            recommendation.delete()
+            return JsonResponse({'success': True, 'message': 'Рекомендация удалена'})
 
     return render(request, '../templates/orders/order_details.html', {
         'order': order,

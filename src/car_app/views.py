@@ -1,22 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_http_methods
+
 from .forms import AddCarForm, UpdateCarForm
 from .models import Car
-
-
-@login_required
-def add_car_view(request):
-    if request.method == 'POST':
-        form = AddCarForm(request.POST)
-        if form.is_valid():
-            car = form.save(commit=False)
-            car.client = request.user  # Привязываем автомобиль к текущему пользователю
-            car.save()
-            return redirect('garage')
-    else:
-        form = AddCarForm(initial={'client': request.user})  # Устанавливаем значение клиента в форме
-    return render(request, '../templates/сars/add_car.html', {'form': form})
 
 
 @login_required
@@ -42,7 +31,32 @@ def update_car_view(request, car_id):
 
 
 @login_required
+@require_http_methods(["GET", "POST"])
 def garage_view(request):
+    if request.method == 'POST':
+        if 'car_id' in request.POST:
+            car_id = request.POST.get('car_id')
+            car = get_object_or_404(Car, id=car_id, client=request.user)
+            form = AddCarForm(request.POST, instance=car)
+            if form.is_valid():
+                form.save()
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({'message': 'Информация об автомобиле обновлена успешно!'})
+                return redirect('garage')
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'errors': form.errors}, status=400)
+        else:
+            form = AddCarForm(request.POST)
+            if form.is_valid():
+                car = form.save(commit=False)
+                car.client = request.user
+                car.save()
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({'message': 'Автомобиль добавлен успешно!'})
+                return redirect('garage')
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'errors': form.errors}, status=400)
+
     search_query = request.GET.get('search_query')
     cars = Car.objects.filter(client=request.user)
 
@@ -57,6 +71,22 @@ def garage_view(request):
             Q(vin_number__icontains=search_query) |
             Q(year_of_manufacture__icontains=search_query)
         )
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest' and 'car_id' in request.GET:
+        car_id = request.GET.get('car_id')
+        car = get_object_or_404(Car, id=car_id, client=request.user)
+        car_data = {
+            'id': car.id,
+            'sts': car.sts,
+            'brand': car.brand,
+            'model': car.model,
+            'body_type': car.body_type,
+            'license_plate': car.license_plate,
+            'color': car.color,
+            'vin_number': car.vin_number,
+            'year_of_manufacture': car.year_of_manufacture,
+        }
+        return JsonResponse(car_data)
 
     return render(request, '../templates/сars/garage.html', {'cars': cars})
 

@@ -15,13 +15,13 @@
 {% endblock %}
 
 {% block header %}
-    {% include 'base_templates/base_account_header.html' with header_title="Ваши заявки" %}
+    {% include 'base_templates/base_header.html' %}
 {% endblock %}
 
 {% block content %}
 <div class="content">
     <div class="left-button">
-        <a href="{% url 'create_order' %}" class="button">Создать заявку</a>
+        <button class="button" id="openModal">Создать заявку</button>
     </div>
     
     <div class="order-cards">
@@ -42,4 +42,36 @@
         {% endfor %}
     </div>
 </div>
+
+<!-- Modal -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <form method="POST">
+            <h2>Запишитесь на СТО в Казани</h2>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Записаться на СТО</button>
+            <button type="button" onclick="window.history.back()">Назад</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('openModal').onclick = function() {
+        document.getElementById('myModal').style.display = 'block';
+    };
+    document.getElementById('closeModal').onclick = function() {
+        document.getElementById('myModal').style.display = 'none';
+    };
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('myModal')) {
+            document.getElementById('myModal').style.display = 'none';
+        }
+    };
+    window.onload = function () {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById("id_chosen_date").setAttribute("min", today);
+    };
+</script>
 {% endblock %}

@@ -8,7 +8,6 @@ h1 {
     margin-bottom: 20px;
 }
 
-
 .content {
     display: flex;
     flex-direction: column;
@@ -16,17 +15,17 @@ h1 {
     padding: 20px;
     margin-top: 170px;
 }
+
 .order-cards {
     column-count: 3;
     column-gap: 20px;
     column-fill: balance;
 }
 
-.left-button{
+.left-button {
     display: flex;
     justify-content: left;
     width: 100%;
-
 }
 
 .button {
@@ -40,7 +39,6 @@ h1 {
     margin: 10px 0 20px 260px;
     cursor: pointer;
     border-radius: 5px;
-
 }
 
 .order-card {
@@ -50,10 +48,10 @@ h1 {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    width: calc(33.333% - 20px); /* Три карточки в ряд с учетом промежутков */
-    min-width: 440px; /* Минимальная ширина для адаптивности */
-    box-sizing: border-box; /* Учитываем границы и отступы внутри ширины */
-    flex: 1; /* Карточки растягиваются равномерно */
+    width: calc(33.333% - 20px);
+    min-width: 440px;
+    box-sizing: border-box;
+    flex: 1;
     margin-bottom: 20px;
 }
 
@@ -99,4 +97,42 @@ h1 {
     margin: 10px 0;
 }
 
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
 
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}

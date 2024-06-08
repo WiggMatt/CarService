@@ -1,7 +1,7 @@
 {% extends 'base_templates/base_layout.html' %}
 {% load static %}
 
-{% block title %} История Обслуживания Клиента {% endblock %}
+{% block title %}История Обслуживания Клиента{% endblock %}
 
 {% block styles %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,8 +9,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         /* CSS стили для дизайна страницы */
         body {
@@ -98,92 +97,92 @@
 {% endblock %}
 
 {% block header %}
-    {% include 'base_templates/base_account_header.html' with header_title="История Обслуживания Клиента" %}
+    {% include 'base_templates/base_header.html' %}
 {% endblock %}
 
 {% block content %}
-    <body>
-    <div class="container">
-        <h1>Service History</h1>
-        {% if client_orders %}
-            {% for order in client_orders %}
-                <div class="order-card" onclick="openModal('{{ order.id }}')">
-                    <div class="order-info">
-                        <div class="order-date">{{ order.chosen_date|date:"D, d M Y" }}</div>
-                        <div class="order-status">{{ order.status }}</div>
-                    </div>
-                    <p><strong>Car:</strong> {{ order.car }}</p>
-                    <p><strong>Comment:</strong> {{ order.comment }}</p>
+<body>
+<div class="container">
+    <h1>Service History</h1>
+    {% if client_orders %}
+        {% for order in client_orders %}
+            <div class="order-card" onclick="openModal('{{ order.id }}')">
+                <div class="order-info">
+                    <div class="order-date">{{ order.chosen_date|date:"D, d M Y" }}</div>
+                    <div class="order-status">{{ order.status }}</div>
                 </div>
-            {% endfor %}
-        {% else %}
-            <p>No orders found.</p>
-        {% endif %}
-    </div>
-
-    <!-- Модальное окно -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <div id="modal-content">
-                <h2>Order Details</h2>
-                <p><strong>Date:</strong> <span id="order-date"></span></p>
-                <p><strong>Status:</strong> <span id="order-status"></span></p>
-                <p><strong>Car:</strong> <span id="order-car"></span></p>
-                <p><strong>Comment:</strong> <span id="order-comment"></span></p>
-                <h3>Services</h3>
-                <ul id="order-services"></ul>
-                <p><strong>Total Price:</strong> <span id="order-total-price"></span></p>
+                <p><strong>Car:</strong> {{ order.car }}</p>
+                <p><strong>Comment:</strong> {{ order.comment }}</p>
             </div>
+        {% endfor %}
+    {% else %}
+        <p>No orders found.</p>
+    {% endif %}
+</div>
+
+<!-- Модальное окно -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="modal-content">
+            <h2>Order Details</h2>
+            <p><strong>Date:</strong> <span id="order-date"></span></p>
+            <p><strong>Status:</strong> <span id="order-status"></span></p>
+            <p><strong>Car:</strong> <span id="order-car"></span></p>
+            <p><strong>Comment:</strong> <span id="order-comment"></span></p>
+            <h3>Services</h3>
+            <ul id="order-services"></ul>
+            <p><strong>Total Price:</strong> <span id="order-total-price"></span></p>
         </div>
     </div>
+</div>
 
-    <script>
-        function openModal(orderId) {
-            console.log("openModal called with orderId: " + orderId);
-            var modal = document.getElementById("myModal");
+<script>
+    function openModal(orderId) {
+        console.log("openModal called with orderId: " + orderId);
+        var modal = document.getElementById("myModal");
 
-            // AJAX запрос для получения дополнительной информации о заказе
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    var orderDetails = JSON.parse(this.responseText);
-                    console.log(orderDetails);
+        // AJAX запрос для получения дополнительной информации о заказе
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var orderDetails = JSON.parse(this.responseText);
+                console.log(orderDetails);
 
-                    document.getElementById("order-date").textContent = orderDetails.chosen_date;
-                    document.getElementById("order-status").textContent = orderDetails.status;
-                    document.getElementById("order-car").textContent = orderDetails.car;
-                    document.getElementById("order-comment").textContent = orderDetails.comment;
-                    document.getElementById("order-total-price").textContent = orderDetails.total_price;
+                document.getElementById("order-date").textContent = orderDetails.chosen_date;
+                document.getElementById("order-status").textContent = orderDetails.status;
+                document.getElementById("order-car").textContent = orderDetails.car;
+                document.getElementById("order-comment").textContent = orderDetails.comment;
+                document.getElementById("order-total-price").textContent = orderDetails.total_price;
 
-                    var servicesList = document.getElementById("order-services");
-                    servicesList.innerHTML = "";  // Clear previous content
-                    orderDetails.services.forEach(function (service) {
-                        var listItem = document.createElement("li");
-                        listItem.textContent = service.name + ": " + service.price + " (" + service.date + ")";
-                        servicesList.appendChild(listItem);
-                    });
+                var servicesList = document.getElementById("order-services");
+                servicesList.innerHTML = "";  // Clear previous content
+                orderDetails.services.forEach(function (service) {
+                    var listItem = document.createElement("li");
+                    listItem.textContent = service.name + ": " + service.price + " (" + service.date + ")";
+                    servicesList.appendChild(listItem);
+                });
 
-                    modal.style.display = "block";
-                }
-            };
-            xhr.open("GET", "/order_details/" + orderId, true);
-            xhr.send();
-        }
+                modal.style.display = "block";
+            }
+        };
+        xhr.open("GET", "{% url 'orders_history' %}?order_id=" + orderId, true);
+        xhr.send();
+    }
 
-        function closeModal() {
-            var modal = document.getElementById("myModal");
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+
+    // Закрытие модального окна при клике вне его области
+    window.onclick = function (event) {
+        var modal = document.getElementById("myModal");
+        if (event.target == modal) {
             modal.style.display = "none";
         }
+    }
+</script>
 
-        // Закрытие модального окна при клике вне его области
-        window.onclick = function (event) {
-            var modal = document.getElementById("myModal");
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
-
-    </body>
+</body>
 {% endblock %}

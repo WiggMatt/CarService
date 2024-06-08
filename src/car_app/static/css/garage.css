@@ -78,7 +78,7 @@ a.button:hover {
     font-size: 30px;
 }
 
-.search-button{
+.search-button {
     margin-left: 20px;
     display: inline-block;
     text-decoration: none;
@@ -90,13 +90,13 @@ a.button:hover {
     transition: background-color 0.3s ease;
 }
 
-form{
+form {
     margin-top: 10px;
     display: flex;
     align-items: center;
 }
 
-form input{
+form input {
     height: 18px;
     border-radius: 10px;
     border: 0;
@@ -106,4 +106,82 @@ form input{
     font-size: 0.875rem;
     color: black;
     text-align: center;
+}
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.modal-content button[type="submit"],
+.modal-content button[type="button"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.modal-content button[type="button"] {
+    background-color: #f44336;
+}
+
+.modal-content button[type="submit"]:hover,
+.modal-content button[type="button"]:hover {
+    opacity: 0.9;
 }
